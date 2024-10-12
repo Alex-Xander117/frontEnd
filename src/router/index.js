@@ -5,6 +5,7 @@ import HomeView from '../views/HomeView.vue';
 import TermsAndConditions from '../views/TermsAndConditions.vue';
 import UserDashboard from '../views/UserDashboard.vue'; // Importar UserDashboard
 
+//hola que hace
 const routes = [
   {
     path: '/login',

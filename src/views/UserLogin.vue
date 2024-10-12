@@ -14,13 +14,13 @@
           <label for="password" class="label">Password</label>
           <input type="password" id="password" class="input" v-model="password" required />
         </div>
-        <div class="group">
 
+        <div class="group">
           <button type="submit" class="button">Login</button>
         </div>
       </form>
-      <div class="foot-lnk">
 
+      <div class="foot-lnk">
         <p>¿No tienes cuenta? <router-link to="/register">Regístrate ahora</router-link></p>
       </div>
     </div>
@@ -56,11 +56,14 @@ body {
 .login-wrap {
   width: 100%;
   margin: auto;
-  max-width: 800px;
+  max-width: 700px;
   min-height: 670px;
   position: relative;
   background: url(https://static.vecteezy.com/system/resources/previews/003/216/275/large_2x/inventory-control-illustration-concept-vector.jpg) no-repeat center;
-  box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
+  background-size: 800px; /* Escala la imagen para cubrir completamente el contenedor */
+  background-position: center center;
+  background-attachment: fixed;
+  box-shadow: 0 30px 40px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
 }
 
 .login-html {
@@ -74,16 +77,16 @@ body {
 .title {
   text-align: center;
   color: white;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 }
 
 .group {
-  margin-bottom: 15px;
+  margin-bottom: 30px;
 }
 
 .group .label {
   color: #aaa;
-  font-size: 12px;
+  font-size: 20px;
 }
 
 .group .input {
@@ -114,6 +117,11 @@ body {
 .foot-lnk {
   text-align: center;
   margin-top: 20px;
+}
+
+.foot-lnk p {
+  color: #000000;
+  text-decoration: none;
 }
 
 .foot-lnk a {

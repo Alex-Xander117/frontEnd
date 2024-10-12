@@ -2,8 +2,10 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Login from '../views/UserLogin.vue';
 import Register from '../views/UserRegister.vue';
 import HomeView from '../views/HomeView.vue';
-import TermsAndConditions from '../views/TermsAndConditions.vue'; // Asegúrate de importar correctamente
+import TermsAndConditions from '../views/TermsAndConditions.vue';
+import UserDashboard from '../views/UserDashboard.vue'; // Importar UserDashboard
 
+//hola que hace
 const routes = [
   {
     path: '/login',
@@ -23,11 +25,17 @@ const routes = [
   {
     path: '/terms',
     name: 'TermsAndConditions',
-    component: TermsAndConditions, // Ruta a la vista de términos y condiciones
+    component: TermsAndConditions,
+  },
+  {
+    path: '/dashboard',
+    name: 'UserDashboard',
+    component: UserDashboard,
+    props: true, // Permitir pasar parámetros como props, como el nombre del usuario
   },
   {
     path: '/',
-    redirect: '/login', // Redirige al login cuando abres la página
+    redirect: '/login', 
   },
 ];
 

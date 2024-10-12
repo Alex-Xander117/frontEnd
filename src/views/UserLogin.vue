@@ -29,13 +29,40 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import ApiService from '../services/ApiService';  // Importar el servicio ApiService
 
-const email = ref('');
+// Definir variables reactivas para el formulario
+const correo = ref('');
 const password = ref('');
+const router = useRouter();  // Usar el enrutador de Vue para redirigir
 
-const handleLogin = () => {
-  //lógica para conectar con el backend
-  console.log('Email:', email.value, 'Password:', password.value);
+// Función para manejar el inicio de sesión
+const handleLogin = async () => {
+  try {
+    const credentials = {
+      correo: correo.value,
+      password: password.value,
+    };
+
+    // Llamar al método login del ApiService
+    const response = await ApiService.login(credentials);
+    
+    // Verificar si la autenticación fue exitosa
+    if (response.status === 200) {
+      const userData = response.data; // Suponiendo que el backend devuelve los datos del usuario
+      
+      // Almacenar los datos del usuario, como nombre, en algún lugar si es necesario
+      console.log('Usuario autenticado:', userData);
+      
+      // Redirigir al usuario a la página de Dashboard
+      router.push({ name: 'UserDashboard', params: { userName: userData.nombre } });
+    } else {
+      console.error('Error en la autenticación, status:', response.status);
+    }
+  } catch (error) {
+    console.error('Error durante el inicio de sesión:', error);
+  }
 };
 </script>
 

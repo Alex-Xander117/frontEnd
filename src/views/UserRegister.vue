@@ -74,13 +74,15 @@ const handleRegister = async () => {
       telefono: telefono.value,
       creadoPor: 'system',  // Valor por defecto o variable según sea necesario
       editadoPor: 'system',
+      aceptaterminos: acceptTerms.value
     };
 
     // Llamar al servicio API para registrar el usuario
     const response = await ApiService.setUser(user);
     
-    if (response.status === 200) {
+    if (response.status === 201) {
       console.log('Usuario registrado con éxito:', response.data);
+      router.push('/login');
       // Redirigir al register después del registro
       router.push({ name: 'register' });
     } else {

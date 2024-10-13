@@ -52,6 +52,7 @@ const handleRegister = async () => {
       telefono: telefono.value,
       creadoPor: 'system',
       editadoPor: 'system',
+      aceptaterminos: acceptTerms.value
     };
 
     const response = await ApiService.setUser(user);

@@ -18,32 +18,30 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import ApiService from '../services/ApiService';
+import ApiService from '../services/ApiService';  // Importar el servicio ApiService
 
-// Variables reactivas
+// Definir variables reactivas para el formulario
 const email = ref('');
 const password = ref('');
+const router = useRouter();  // Usar el enrutador de Vue para redirigir
 
-// Router para redirigir
-const router = useRouter();
-
-// Función para manejar inicio de sesión
+// Función para manejar el inicio de sesión
 const handleLogin = async () => {
   try {
-    const response = await ApiService.loginUser({ email: email.value, password: password.value });
+    // Llamar a loginUser con las credenciales
+    const response = await ApiService.login({ correo: email.value, password: password.value });
     
-    if (response.status === 200) {
-      // Guardar el nombre de usuario en el localStorage o vuex si tienes configurado
-      const userName = response.data.nombre;
-      localStorage.setItem('userName', userName);
-      
-      // Redirigir al dashboard
-      router.push('/dashboard');
+    if (response && response.token) {
+      // Si la respuesta contiene el token, guardarlo
+      localStorage.setItem('authToken', response.token);
+      localStorage.setItem('userName', response.nombre);
+      router.push('/home');
     } else {
       console.error('Error al iniciar sesión');
     }
   } catch (error) {
-    console.error('Error durante el inicio de sesión:', error);
+    console.error('Error durante el inicio de sesión:', error.message);
+    alert(error.message); // Muestra un mensaje al usuario
   }
 };
 </script>

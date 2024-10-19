@@ -41,7 +41,7 @@ const router = useRouter();  // Usar el enrutador de Vue para redirigir
 const handleLogin = async () => {
   try {
     // Llamar a loginUser con las credenciales
-    const response = await ApiService.login({ correo: email.value, password: password.value });
+    const response = await ApiService.login({ email: email.value, password: password.value });
     
     if (response && response.token) {
       // Si la respuesta contiene el token, guardarlo

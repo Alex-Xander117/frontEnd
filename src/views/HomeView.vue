@@ -14,31 +14,18 @@
         <div class="collapse navbar-collapse" :class="{ show: isNavbarOpen }" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto">
             <li class="nav-item">
-              <router-link to="/register" class="nav-link">Registrarse</router-link>
+              <router-link to="/register" class="nav-link">Servicios</router-link>
+            </li>
+            <li class="nav-item">
+              <router-link to="/team" class="nav-link">Equipo</router-link>
             </li>
 
             <li class="nav-item">
-              <router-link to="/login" class="nav-link">Iniciar sesión</router-link>
+              <router-link to="/contact" class="nav-link">Contacto</router-link>
             </li>
 
             <li class="nav-item">
-              <router-link to="/portfolio" class="nav-link">Portfolio</router-link>
-            </li>
-
-            <li class="nav-item">
-              <router-link to="/reference" class="nav-link">Reference</router-link>
-            </li>
-
-            <li class="nav-item">
-              <router-link to="/about" class="nav-link">About</router-link>
-            </li>
-
-            <li class="nav-item">
-              <router-link to="/team" class="nav-link">Team</router-link>
-            </li>
-
-            <li class="nav-item">
-              <router-link to="/contact" class="nav-link">Contact</router-link>
+              <router-link to="/contact" class="nav-link">Cuenta</router-link>
             </li>
           </ul>
 

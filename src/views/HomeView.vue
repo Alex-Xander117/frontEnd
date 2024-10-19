@@ -14,7 +14,7 @@
         <div class="collapse navbar-collapse" :class="{ show: isNavbarOpen }" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto">
             <li class="nav-item">
-              <router-link to="/register" class="nav-link">Servicios</router-link>
+              <router-link to="/service" class="nav-link">Servicios</router-link>
             </li>
             <li class="nav-item">
               <router-link to="/team" class="nav-link">Equipo</router-link>
@@ -22,10 +22,6 @@
 
             <li class="nav-item">
               <router-link to="/contact" class="nav-link">Contacto</router-link>
-            </li>
-
-            <li class="nav-item">
-              <router-link to="/contact" class="nav-link">Cuenta</router-link>
             </li>
           </ul>
 
@@ -41,11 +37,22 @@
                 <i class="fab fa-twitter"></i>
               </a>
             </li>
-            
+
             <li class="nav-item me-3 me-lg-0">
               <a class="nav-link" href="https://instagram.com" target="_blank">
                 <i class="fab fa-instagram"></i>
               </a>
+            </li>
+
+            <!-- Usuario dropdown -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="https://via.placeholder.com/40" class="rounded-circle" alt="User Icon">
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                <li><router-link class="dropdown-item" to="/profile">Ver perfil</router-link></li>
+                <li><a class="dropdown-item" @click="handleLogout">Cerrar sesión</a></li>
+              </ul>
             </li>
           </ul>
         </div>
@@ -96,12 +103,22 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 const isNavbarOpen = ref(false);
+const router = useRouter();
 
 // Función para alternar la visibilidad del menú de navegación
 const toggleNavbar = () => {
   isNavbarOpen.value = !isNavbarOpen.value;
+};
+
+// Función para cerrar sesión
+const handleLogout = () => {
+  if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
+    localStorage.removeItem('username'); // Eliminar el nombre del usuario
+    router.push('/login'); // Redirigir al login
+  }
 };
 </script>
 
@@ -139,6 +156,10 @@ const toggleNavbar = () => {
 .bg-image {
   background-size: cover;
   background-position: center;
+  position: relative;
+  z-index: 1;
+  /* Aplica un sombreado interno para la viñeta oscura */
+  box-shadow: inset 0 0 100px 50px rgba(0, 0, 0, 0.7);
 }
 
 /* Tarjetas */
@@ -162,10 +183,11 @@ const toggleNavbar = () => {
   color: #333;
 }
 
+/*posicion tarjetas*/
 .custom-position {
-  top: 60%;  /* Ajusta este valor para mover las tarjetas hacia abajo o hacia arriba */
-  left: 7%; /* Ajusta este valor para mover las tarjetas hacia la izquierda o derecha */
-  transform: none; /* Elimina la transformación de centrado si no quieres que estén centradas */
+  top: 60%;
+  left: 7%; 
+  transform: none;
 }
 
 section .container {
@@ -174,5 +196,16 @@ section .container {
 
 section.container {
   margin-bottom: 2rem;
+}
+
+/* Estilo para el dropdown de usuario */
+img.rounded-circle {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+}
+
+.dropdown-menu {
+  text-align: center;
 }
 </style>

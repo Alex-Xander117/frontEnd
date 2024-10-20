@@ -23,6 +23,7 @@ const router = useRouter();
 // Función para cerrar sesión
 const handleLogout = () => {
   if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
+    localStorage.removeItem('token');
     localStorage.removeItem('username'); // Eliminar el nombre del usuario
     router.push('/login'); // Redirigir al login
   }

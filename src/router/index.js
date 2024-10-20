@@ -3,7 +3,7 @@ import Login from '../views/UserLogin.vue';
 import Register from '../views/UserRegister.vue';
 import HomeView from '../views/HomeView.vue';
 import TermsAndConditions from '../views/TermsAndConditions.vue';
-import UserDashboard from '../views/UserDashboard.vue'; // Importar UserDashboard
+import SeriviceView from '../views/ServiceView.vue';
 
 //hola que hace
 const routes = [
@@ -28,14 +28,13 @@ const routes = [
     component: TermsAndConditions,
   },
   {
-    path: '/dashboard',
-    name: 'UserDashboard',
-    component: UserDashboard,
-    props: true, // Permitir pasar parámetros como props, como el nombre del usuario
-  },
-  {
     path: '/',
     redirect: '/login', 
+  },
+  {
+    path: '/service',
+    name: 'Service',
+    component: SeriviceView,
   },
 ];
 

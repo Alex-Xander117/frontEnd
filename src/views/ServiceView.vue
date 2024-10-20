@@ -55,34 +55,40 @@
       <div id="intro" class="bg-image vh-100" style="background-image: url('https://www.ecommercenews.pe/wp-content/uploads/2022/02/Almacenes-para-logistica-y-centros-de-distribucion-crecen-en-Peru.jpg');">
         <div class="mask" style="background-color: rgba(250, 182, 162, 0.15);"></div>
 
-        <!-- Section: Cards -->
-        <div class="container position-absolute custom-position">
-          <div class="row">
-            <div class="col-md-6 mb-4">
-              <div class="card h-100 shadow-0 border">
-                <div class="card-body">
-                  <h5 class="card-title">Sobre Nosotros</h5>
-                  <p class="card-text">
-                    Somos un equipo especializado en brindar seguimiento de inventario desde el momento de su fabricación hasta los almacenes, y desde estas hasta el punto de venta.
-                  </p>
-                </div>
-              </div>
-            </div>
+        <!-- Section: Card with Table -->
+        <div class="container main-content">
+          <div class="card custom-card">
+            <div class="card-body">
+              <h5 class="card-title">Productos</h5>
 
-            <div class="col-md-6 mb-4">
-              <div class="card h-100 shadow-0 border">
-                <div class="card-body">
-                  <h5 class="card-title">Servicios</h5>
-                  <p class="card-text">
-                    Ofrecemos control de la cantidad del producto a la venta, las mercancías acabadas son liberadas para tramitar los pedidos, los productos son enviados a los clientes.
-                  </p>
-                </div>
-              </div>
+              <!-- Tabla para los productos -->
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Categoría</th>
+                    <th scope="col">Precio</th>
+                    <th scope="col">Descripción</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="producto in productos" :key="producto.id">
+                    <td>{{ producto.id }}</td>
+                    <td><input v-model="producto.nombre" placeholder="Nombre del producto" /></td>
+                    <td><input v-model="producto.categoria" placeholder="Categoría" /></td>
+                    <td><input v-model="producto.precio" placeholder="Precio" /></td>
+                    <td><input v-model="producto.descripcion" placeholder="Descripción" /></td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <!-- Botones para agregar y eliminar productos -->
+              <button @click="agregarProducto" class="btn btn-primary mt-3">+</button>
+              <button @click="eliminarProducto" class="btn btn-danger mt-3">-</button>
             </div>
           </div>
         </div>
-        <!-- Section: Cards -->
-
       </div>
       <!-- Intro -->
     </section>
@@ -91,31 +97,50 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'; // Importa onMounted para cargar el nombre al montar
+import { ref, onMounted } from 'vue'; 
 import { useRouter } from 'vue-router';
 
 const isNavbarOpen = ref(false);
 const router = useRouter();
-const userName = ref(''); // Almacenar el nombre del usuario
+const userName = ref(''); 
 
-// Función para cargar el nombre del usuario al montar el componente
 onMounted(() => {
   userName.value = localStorage.getItem('username') || 'Invitado';
-  console.log('Nombre de usuario cargado:', userName.value); // Para depurar
 });
 
-
-// Función para alternar la visibilidad del menú de navegación
 const toggleNavbar = () => {
   isNavbarOpen.value = !isNavbarOpen.value;
 };
 
-// Función para cerrar sesión
 const handleLogout = () => {
   if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
-    localStorage.removeItem('username'); // Eliminar el nombre del usuario
-    localStorage.removeItem('authToken'); // También eliminar el token de autenticación
-    router.push('/login'); // Redirigir al login
+    localStorage.removeItem('username');
+    localStorage.removeItem('authToken');
+    router.push('/login');
+  }
+};
+
+const productos = ref([
+  { id: 1, nombre: '', categoria: '', precio: '', descripcion: '' },
+]);
+
+const agregarProducto = () => {
+  const newId = productos.value.length ? productos.value[productos.value.length - 1].id + 1 : 1; // Incrementa el ID basado en el último producto
+  productos.value.push({
+    id: newId,
+    nombre: '',
+    categoria: '',
+    precio: '',
+    descripcion: '',
+  });
+};
+
+// Función para eliminar el último producto
+const eliminarProducto = () => {
+  if (productos.value.length > 0) {
+    productos.value.pop(); // Elimina el último producto
+  } else {
+    alert('No hay productos para eliminar.');
   }
 };
 </script>
@@ -145,44 +170,33 @@ const handleLogout = () => {
   background-position: center;
   position: relative;
   z-index: 1;
-  /* Aplica un sombreado interno para la viñeta oscura */
   box-shadow: inset 0 0 100px 50px rgba(0, 0, 0, 0.7);
 }
 
-/* Tarjetas */
-.card {
-  background-color: rgba(255, 255, 255, 0.9);
-  border-radius: 0.75rem;
+/* Main content container */
+.main-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }
 
-.card-body {
+/* Card styling */
+.custom-card {
+  background-color: rgba(255, 255, 255, 0.925);
+  width: 80%;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 0.5rem;
   padding: 2rem;
+  text-align: center;
 }
 
-.card-title {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #65c7c2;
-}
-
-.card-text {
-  font-size: 1rem;
-  color: #333;
-}
-
-/* Posicionamiento de las tarjetas */
-.custom-position {
-  top: 60%;
-  left: 7%;
-  transform: none;
-}
-
-section .container {
-  margin-top: 0; /* Eliminamos el margen superior */
-}
-
-section.container {
-  margin-bottom: 2rem;
+/* Table styling */
+.table input {
+  border: none;
+  background: none;
+  outline: none;
+  width: 100%;
 }
 
 /* Estilo para el dropdown de usuario */

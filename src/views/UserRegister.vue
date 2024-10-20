@@ -82,6 +82,7 @@ const handleRegister = async () => {
     
     if (response.status === 201) {
       console.log('Usuario registrado con éxito:', response.data);
+      localStorage.setItem('userName', nombre.value);
       router.push('/login');
       // Redirigir al register después del registro
       router.push({ name: 'register' });
@@ -111,7 +112,7 @@ body {
 .register-wrap {
   width: 100%;
   margin: auto;
-  max-width: 700px;
+  max-width: 720px;
   min-height: 870px;
   position: relative;
   background: url(https://static.vecteezy.com/system/resources/previews/003/216/275/large_2x/inventory-control-illustration-concept-vector.jpg) no-repeat center;

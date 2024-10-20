@@ -7,6 +7,7 @@ export default {
   async getUsers(){
     return axios.get(`${API_URL}/usuarios`);
   },
+
   async setUser(usuario) {
     try {
       const response = await axios.post(`${API_URL}/usuarios`, usuario);
@@ -16,6 +17,7 @@ export default {
       throw error;
     }
   },
+
   async login(credentials) {
     try{
       const response = await axios.post(`${API_URL}/loginUser`, credentials);
@@ -24,6 +26,7 @@ export default {
       console.error('Error login', error.response || error.message)
     }
   },
+  
    // Función para hacer solicitudes con autenticación
    async fetchData() {
     const token = localStorage.getItem('authToken'); // Obtener el token del localStorage

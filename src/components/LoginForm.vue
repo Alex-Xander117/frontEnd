@@ -34,7 +34,7 @@ const handleLogin = async () => {
     if (response && response.token) {
       // Si la respuesta contiene el token, guardarlo
       localStorage.setItem('authToken', response.token);
-      localStorage.setItem('userName', response.nombre);
+      localStorage.setItem('username', response.nombre);
       router.push('/home');
     } else {
       console.error('Error al iniciar sesión');

@@ -57,6 +57,7 @@ const handleRegister = async () => {
 
     const response = await ApiService.setUser(user);
     if (response.status === 201) {
+      localStorage.setItem('username', nombre.value); /*almacenar el nombre del usuaio en localStorage*/
       router.push('/login');
     }
   } catch (error) {

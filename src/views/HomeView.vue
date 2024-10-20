@@ -4,7 +4,7 @@
     <nav class="navbar navbar-expand-lg navbar-light fixed-top mask-custom shadow-0">
       <div class="container">
         <router-link to="/home" class="navbar-brand">
-          <span style="color: #5e9693;">Inventory</span><span style="color: #fff;">Logistics</span>
+          <span style="color: #65c7c2;">Inventory</span><span style="color: #fff;">Logistics</span>
         </router-link>
 
         <button class="navbar-toggler" type="button" @click="toggleNavbar">
@@ -16,6 +16,7 @@
             <li class="nav-item">
               <router-link to="/service" class="nav-link">Servicios</router-link>
             </li>
+
             <li class="nav-item">
               <router-link to="/team" class="nav-link">Equipo</router-link>
             </li>
@@ -26,31 +27,19 @@
           </ul>
 
           <ul class="navbar-nav d-flex flex-row">
-            <li class="nav-item me-3 me-lg-0">
-              <router-link to="/cart" class="nav-link">
-                <i class="fas fa-shopping-cart"></i>
-              </router-link>
-            </li>
-
-            <li class="nav-item me-3 me-lg-0">
-              <a class="nav-link" href="https://twitter.com" target="_blank">
-                <i class="fab fa-twitter"></i>
-              </a>
-            </li>
-
-            <li class="nav-item me-3 me-lg-0">
-              <a class="nav-link" href="https://instagram.com" target="_blank">
-                <i class="fab fa-instagram"></i>
-              </a>
-            </li>
-
             <!-- Usuario dropdown -->
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <img src="https://via.placeholder.com/40" class="rounded-circle" alt="User Icon">
               </a>
+
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                <li class="dropdown-item">
+                  <strong>{{ userName }}</strong> <!-- Muestra el nombre del usuario aquí -->
+                </li>
+
                 <li><router-link class="dropdown-item" to="/profile">Ver perfil</router-link></li>
+
                 <li><a class="dropdown-item" @click="handleLogout">Cerrar sesión</a></li>
               </ul>
             </li>
@@ -102,11 +91,19 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue'; // Importa onMounted para cargar el nombre al montar
 import { useRouter } from 'vue-router';
 
 const isNavbarOpen = ref(false);
 const router = useRouter();
+const userName = ref(''); // Almacenar el nombre del usuario
+
+// Función para cargar el nombre del usuario al montar el componente
+onMounted(() => {
+  userName.value = localStorage.getItem('username') || 'Invitado';
+  console.log('Nombre de usuario cargado:', userName.value); // Para depurar
+});
+
 
 // Función para alternar la visibilidad del menú de navegación
 const toggleNavbar = () => {
@@ -117,35 +114,25 @@ const toggleNavbar = () => {
 const handleLogout = () => {
   if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
     localStorage.removeItem('username'); // Eliminar el nombre del usuario
+    localStorage.removeItem('authToken'); // También eliminar el token de autenticación
     router.push('/login'); // Redirigir al login
   }
 };
 </script>
 
 <style scoped>
-/* Color of the links BEFORE scroll */
-.navbar-scroll .nav-link,
-.navbar-scroll .navbar-toggler-icon,
-.navbar-scroll .navbar-brand {
-  color: #fff;
+.navbar .nav-link {
+  color: #fff !important; 
+  transition: color 0.3s ease; 
 }
 
-/* Color of the links AFTER scroll */
-.navbar-scrolled .nav-link,
-.navbar-scrolled .navbar-toggler-icon,
-.navbar-scrolled .navbar-brand {
-  color: #fff;
-}
-
-/* Color of the navbar AFTER scroll */
-.navbar-scroll,
-.navbar-scrolled {
-  background-color: #cbbcb1;
+.navbar .nav-link:hover {
+  color: #65c7c2 !important; 
 }
 
 .mask-custom {
   backdrop-filter: blur(5px);
-  background-color: rgba(255, 255, 255, .15);
+  background-color: rgba(255, 255, 255, 0.062);
 }
 
 .navbar-brand {
@@ -164,7 +151,7 @@ const handleLogout = () => {
 
 /* Tarjetas */
 .card {
-  background-color: rgba(255, 255, 255, 0.9); /* transparentencia */
+  background-color: rgba(255, 255, 255, 0.9);
   border-radius: 0.75rem;
 }
 
@@ -175,7 +162,7 @@ const handleLogout = () => {
 .card-title {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #5e9693;
+  color: #65c7c2;
 }
 
 .card-text {
@@ -183,10 +170,10 @@ const handleLogout = () => {
   color: #333;
 }
 
-/*posicion tarjetas*/
+/* Posicionamiento de las tarjetas */
 .custom-position {
   top: 60%;
-  left: 7%; 
+  left: 7%;
   transform: none;
 }
 

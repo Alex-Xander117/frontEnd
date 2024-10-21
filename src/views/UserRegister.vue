@@ -84,8 +84,6 @@ const handleRegister = async () => {
       console.log('Usuario registrado con éxito:', response.data);
       localStorage.setItem('userName', nombre.value);
       router.push('/login');
-      // Redirigir al register después del registro
-      router.push({ name: 'register' });
     } else {
       console.error('Error en el registro:', response.status);
     }
@@ -111,81 +109,85 @@ body {
 
 .register-wrap {
   width: 100%;
-  margin: auto;
-  max-width: 720px;
-  min-height: 870px;
-  position: relative;
-  background: url(https://static.vecteezy.com/system/resources/previews/003/216/275/large_2x/inventory-control-illustration-concept-vector.jpg) no-repeat center;
-  background-size: 800px;
-  background-position: center center;
+  height: 100vh; /* Asegura que cubra toda la altura de la ventana */
+  display: flex; /* Utiliza flexbox para centrar el contenido */
+  justify-content: center; /* Centra horizontalmente */
+  align-items: center; /* Centra verticalmente */
+  background: url(https://i.makeagif.com/media/3-18-2016/pStRpD.gif) no-repeat center;
+  background-size: cover; /* Ajusta para cubrir todo el contenedor */
   background-attachment: fixed;
-  box-shadow: 0 30px 40px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
 }
 
 .register-html {
   width: 100%;
-  height: 100%;
-  position: absolute;
-  padding: 90px 70px 50px 70px;
-  background: rgba(40, 57, 101, 0.9);
+  max-width: 450px; /* Ajustado para que sea un poco más ancho */
+  padding: 30px; /* Aumentado el padding para un mejor espaciado */
+  background: rgba(40, 57, 101, 0.9); /* Fondo semi-transparente para consistencia con el login */
+  border-radius: 10px; /* Bordes redondeados para un diseño suave */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Sombra para dar profundidad */
 }
 
 .title {
   text-align: center;
-  color: white;
-  margin-bottom: 40px;
+  color: #ffffff; /* Color blanco para contraste con el fondo */
+  margin-bottom: 20px;
 }
 
 .group {
-  margin-bottom: 30px;
+  margin-bottom: 20px; /* Espaciado entre cada grupo de formulario */
 }
 
-.group .label {
-  color: #aaa;
-  font-size: 20px;
+.group label {
+  color: #ffffff; /* Cambiado a blanco */
+  font-size: 16px; /* Ajustar el tamaño de la fuente si es necesario */
 }
+
 
 .group .input {
   width: 100%;
-  padding: 15px 20px;
+  padding: 12px 20px; /* Ajuste del padding para mejor legibilidad */
   border: none;
   border-radius: 25px;
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
+  background: rgba(255, 255, 255, 0.1); /* Fondo translúcido para estilo consistente */
+  color: #ffffff;
+}
+
+.group .input:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.2); /* Cambio ligero de fondo al enfocarse */
 }
 
 .group .button {
   width: 100%;
-  padding: 15px 20px;
+  padding: 15px 20px; /* Botón con mayor padding para facilidad de uso */
   border: none;
   border-radius: 25px;
-  background: #1161ee;
-  color: white;
+  background: #1161ee; /* Color de botón consistente con el estilo general */
+  color: #ffffff;
   cursor: pointer;
   font-size: 16px;
   font-weight: 600;
 }
 
 .group .button:hover {
-  background-color: #0e4bcc;
+  background-color: #0e4bcc; /* Cambio de color en hover para dar retroalimentación visual */
 }
 
 .foot-lnk {
   text-align: center;
-  margin-top: 20px;
+  margin-top: 15px; /* Ajustado el margen superior */
 }
 
 .foot-lnk p {
-  color: #000000;
-  text-decoration: none;
+  color: #dddddd; /* Texto gris claro */
 }
 
 .foot-lnk a {
-  color: #fff;
+  color: #00e5ff; /* Color del enlace consistente con el login */
   text-decoration: none;
 }
 
 .foot-lnk a:hover {
-  text-decoration: underline;
+  text-decoration: underline; /* Subrayado al pasar el mouse */
 }
 </style>

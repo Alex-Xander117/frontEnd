@@ -6,40 +6,31 @@
         <router-link to="/home" class="navbar-brand">
           <span style="color: #65c7c2;">Inventory</span><span style="color: #fff;">Logistics</span>
         </router-link>
-
         <button class="navbar-toggler" type="button" @click="toggleNavbar">
           <i class="fas fa-bars"></i>
         </button>
-
         <div class="collapse navbar-collapse" :class="{ show: isNavbarOpen }" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto">
             <li class="nav-item">
               <router-link to="/service" class="nav-link">Servicios</router-link>
             </li>
-
             <li class="nav-item">
               <router-link to="/team" class="nav-link">Equipo</router-link>
             </li>
-
             <li class="nav-item">
               <router-link to="/contact" class="nav-link">Contacto</router-link>
             </li>
           </ul>
-
           <ul class="navbar-nav d-flex flex-row">
-            <!-- Usuario dropdown -->
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <img src="https://via.placeholder.com/40" class="rounded-circle" alt="User Icon">
               </a>
-
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                 <li class="dropdown-item">
-                  <strong>{{ userName }}</strong> <!-- Muestra el nombre del usuario aquí -->
+                  <strong>{{ userName }}</strong>
                 </li>
-
                 <li><router-link class="dropdown-item" to="/profile">Ver perfil</router-link></li>
-
                 <li><a class="dropdown-item" @click="handleLogout">Cerrar sesión</a></li>
               </ul>
             </li>
@@ -47,65 +38,102 @@
         </div>
       </div>
     </nav>
-    <!-- Navbar -->
 
     <!-- Section: Design Block -->
     <section>
-      <!-- Intro -->
-      <div id="intro" class="bg-image vh-100" style="background-image: url('https://www.ecommercenews.pe/wp-content/uploads/2022/02/Almacenes-para-logistica-y-centros-de-distribucion-crecen-en-Peru.jpg');">
+      <div id="intro" class="bg-image" style="background-image: url('https://www.ecommercenews.pe/wp-content/uploads/2022/02/Almacenes-para-logistica-y-centros-de-distribucion-crecen-en-Peru.jpg');">
         <div class="mask" style="background-color: rgba(250, 182, 162, 0.15);"></div>
 
-        <!-- Section: Card with Table -->
-        <div class="container main-content">
-          <div class="card custom-card">
-            <div class="card-body">
-              <h5 class="card-title">Productos</h5>
+        <!-- Contenedor Principal -->
+        <div class="container main-content mt-5">
+          <div class="row">
+            <!-- Primer cuadro con botones -->
+            <div class="col-md-4">
+              <div class="card custom-card">
+                <div class="card-body">
+                  <h5 class="card-title">Opciones de Producto</h5>
+                  <button @click="agregarProducto" class="btn btn-primary mt-3 w-100 mb-3">Agregar Producto</button>
+                  <button @click="mostrarInformacion" class="btn btn-info mt-3 w-100 mb-3">Mostrar Información</button>
+                </div>
+              </div>
+            </div>
 
-              <!-- Tabla para los productos -->
-              <table class="table table-striped">
-                <thead>
-                  <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Nombre</th>
-                    <th scope="col">Categoría</th>
-                    <th scope="col">Precio</th>
-                    <th scope="col">Descripción</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="producto in productos" :key="producto.id">
-                    <td>{{ producto.id }}</td>
-                    <td><input v-model="producto.nombre" placeholder="Nombre del producto" /></td>
-                    <td><input v-model="producto.categoria" placeholder="Categoría" /></td>
-                    <td><input v-model="producto.precio" placeholder="Precio" /></td>
-                    <td><input v-model="producto.descripcion" placeholder="Descripción" /></td>
-                  </tr>
-                </tbody>
-              </table>
+            <!-- Segundo cuadro para mostrar la información o formulario -->
+            <div class="col-md-8">
+              <div v-if="mostrarInformacionFlag" class="card custom-card">
+                <div class="card-body">
+                  <h5 class="card-title">Productos</h5>
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Categoría</th>
+                        <th scope="col">Precio</th>
+                        <th scope="col">Descripción</th>
+                        <th scope="col">Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-if="productos.length === 0">
+                        <td colspan="6">No hay productos disponibles</td>
+                      </tr>
+                      <tr v-for="producto in productos" :key="producto.id">
+                        <td>{{ producto.id }}</td>
+                        <td><input v-model="producto.nombre" placeholder="Nombre del producto" class="form-control" /></td>
+                        <td><input v-model="producto.descripcion" placeholder="Descripción" class="form-control" /></td>
+                        <td><input v-model="producto.precio" placeholder="Precio" class="form-control" /></td>
+                        <td><input v-model="producto.cantidad_stock" placeholder="Stock" class="form-control" /></td>
+                        <td>
+                          <button @click="actualizarProducto(producto.id)" class="btn btn-success">Actualizar</button>
+                          <button @click="eliminarProducto(producto.id)" class="btn btn-danger">Eliminar</button>
+                        </td>
+                      </tr>
+                    </tbody>
 
-              <!-- Botones para agregar y eliminar productos -->
-              <button @click="agregarProducto" class="btn btn-primary mt-3">+</button>
-              <button @click="eliminarProducto" class="btn btn-danger mt-3">-</button>
+                  </table>
+                </div>
+              </div>
+              <div v-else class="card custom-card">
+                <div class="card-body">
+                  <h5 class="card-title">Agregar Producto</h5>
+                  <div class="form-group">
+                    <input v-model="nuevoProducto.nombre" placeholder="Nombre del producto" class="form-control mb-3" />
+                    <input v-model="nuevoProducto.descripcion" placeholder="Descripción" class="form-control mb-3" />
+                    <input v-model="nuevoProducto.precio" placeholder="Precio" class="form-control mb-3" />
+                    <input v-model="nuevoProducto.cantidad_stock" placeholder="Cantidad Stock" class="form-control mb-3" />
+                  </div>
+                  <button @click="guardarNuevoProducto" class="btn btn-success w-100">Guardar Producto</button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <!-- Intro -->
     </section>
-    <!-- Section: Design Block -->
   </header>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'; 
 import { useRouter } from 'vue-router';
+import ApiService from '@/services/ApiService';
 
 const isNavbarOpen = ref(false);
 const router = useRouter();
-const userName = ref(''); 
+const userName = ref('');
+const productos =  ref([]);
+const mostrarInformacionFlag = ref(true); // Bandera para saber si mostrar productos o formulario
+const nuevoProducto = ref({
+  nombre: '',
+  descripcion: '',
+  precio: '',
+  cantidad_stock: ''
+});
 
-onMounted(() => {
-  userName.value = localStorage.getItem('username') || 'Invitado';
+onMounted(async () => {
+  userName.value = localStorage.getItem('userName') || 'Invitado';
+  await obtenerProductos();
 });
 
 const toggleNavbar = () => {
@@ -114,33 +142,60 @@ const toggleNavbar = () => {
 
 const handleLogout = () => {
   if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
-    localStorage.removeItem('username');
+    localStorage.removeItem('userName');
     localStorage.removeItem('authToken');
     router.push('/login');
   }
 };
 
-const productos = ref([
-  { id: 1, nombre: '', categoria: '', precio: '', descripcion: '' },
-]);
+// Funciones CRUD
 
-const agregarProducto = () => {
-  const newId = productos.value.length ? productos.value[productos.value.length - 1].id + 1 : 1; // Incrementa el ID basado en el último producto
-  productos.value.push({
-    id: newId,
-    nombre: '',
-    categoria: '',
-    precio: '',
-    descripcion: '',
-  });
+const obtenerProductos = async () => {
+  try {
+    const response = await ApiService.obtenerProductos();
+    console.log(response.data); // Verifica la respuesta aquí
+    productos.value = response || []; // Asegúrate de manejar el caso de undefined
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
 };
 
-// Función para eliminar el último producto
-const eliminarProducto = () => {
-  if (productos.value.length > 0) {
-    productos.value.pop(); // Elimina el último producto
-  } else {
-    alert('No hay productos para eliminar.');
+const agregarProducto = async () => {
+  mostrarInformacionFlag.value = false; // Cambia a formulario de agregar producto
+};
+
+const mostrarInformacion = () => {
+  mostrarInformacionFlag.value = true; // Muestra la tabla de productos
+};
+
+const guardarNuevoProducto = async () => {
+  try {
+    const response = await ApiService.agregarProducto(nuevoProducto.value);
+    productos.value.push(response);
+    nuevoProducto.value = { nombre: '', descripcion: '', precio: '', cantidad_stock: '' }; // Limpiar el formulario
+    mostrarInformacionFlag.value = true; // Regresar a la vista de productos
+  } catch (error) {
+    console.error('Error al agregar producto:', error);
+  }
+};
+
+const actualizarProducto = async (id) => {
+  const producto = productos.value.find(p => p.id === id);
+  try {
+    const response = await ApiService.actualizarProducto(id, producto);
+    const index = productos.value.findIndex(p => p.id === id);
+    productos.value[index] = response.data;
+  } catch (error) {
+    console.error('Error al actualizar producto:', error);
+  }
+};
+
+const eliminarProducto = async (id) => {
+  try {
+    await ApiService.eliminarProducto(id);
+    productos.value = productos.value.filter(p => p.id !== id);
+  } catch (error) {
+    console.error('Error al eliminar producto:', error);
   }
 };
 </script>
@@ -176,37 +231,37 @@ const eliminarProducto = () => {
 /* Main content container */
 .main-content {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: center; /* Centrado horizontal */
+  align-items: center; /* Centrado vertical */
   min-height: 100vh;
+  height: 100%; /* Asegura que ocupe toda la altura disponible */
 }
 
 /* Card styling */
 .custom-card {
-  background-color: rgba(255, 255, 255, 0.925);
-  width: 80%;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  border-radius: 0.5rem;
-  padding: 2rem;
-  text-align: center;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 100%; /* Permite que el card ocupe el 100% del ancho disponible */
+  max-width: 1000px; /* Define un ancho máximo para evitar que el cuadro sea demasiado grande */
 }
 
-/* Table styling */
-.table input {
-  border: none;
-  background: none;
-  outline: none;
-  width: 100%;
+/* Input fields */
+.form-control {
+  background-color: hsl(0, 0%, 96%);
+  border: 1px solid #ddd;
+  
 }
 
-/* Estilo para el dropdown de usuario */
-img.rounded-circle {
-  width: 40px;
-  height: 40px;
-  object-fit: cover;
+.form-control:focus {
+  border-color: #65c7c2;
 }
 
-.dropdown-menu {
-  text-align: center;
-}
+
+
+
 </style>
+
+
+

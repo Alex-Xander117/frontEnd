@@ -47,7 +47,9 @@ const handleLogin = async () => {
       // Si la respuesta contiene el token, guardarlo
       localStorage.setItem('authToken', response.token);
       localStorage.setItem('userName', response.nombre);
-      router.push('/dashboard');
+      console.log(response); // Verifica si el campo "nombre" está presente
+
+      router.push('/home');
     } else {
       console.error('Error al iniciar sesión');
     }

@@ -41,5 +41,29 @@ export default {
       console.error('Error al obtener los datos protegidos:', error);
       throw error;
     }
-  }
+  },
+    async obtenerProductos() {
+      try {
+        const response = await axios.get(`${API_URL}/productos`);
+        return response.data;  // Devuelve la lista de productos
+      } catch (error) {
+        console.error('Error al obtener productos', error.response || error.message);
+      }
+    },
+    async agregarProducto(producto) {
+      try {
+        const response = await axios.post(`${API_URL}/Guardaproducto`, producto);
+        return response.data;  // Devuelve el producto recién agregado
+      } catch (error) {
+        console.error('Error al agregar producto', error.response || error.message);
+      }
+    },
+    async eliminarProducto(id) {
+      try {
+        await axios.delete(`${API_URL}/productos/${id}`);
+        return true;  // Devuelve true si la eliminación fue exitosa
+      } catch (error) {
+        console.error('Error al eliminar producto', error.response || error.message);
+      }
+    }
 };

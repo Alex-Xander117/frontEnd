@@ -46,13 +46,11 @@ const handleLogin = async () => {
       // Si la respuesta contiene el token, guardarlo
       localStorage.setItem('authToken', response.token);
       localStorage.setItem('userName', response.nombre);
-<<<<<<< HEAD
+
       console.log(response); // Verifica si el campo "nombre" está presente
 
       router.push('/home');
-=======
-      router.push('/home'); // Cambiar a /home
->>>>>>> ad880e3086af3b0ba99ffdbfe010f2d3f77b1c7e
+
     } else {
       console.error('Error al iniciar sesión');
     }

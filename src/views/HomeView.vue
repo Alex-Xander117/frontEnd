@@ -145,7 +145,8 @@ const handleLogout = () => {
   background-position: center;
   position: relative;
   z-index: 1;
-  /* Aplica un sombreado interno para la viñeta oscura */
+  height: 100vh; /* Asegura que ocupe toda la altura de la ventana */
+  overflow: hidden; /* Evita el espacio blanco */
   box-shadow: inset 0 0 100px 50px rgba(0, 0, 0, 0.7);
 }
 
@@ -166,15 +167,15 @@ const handleLogout = () => {
 }
 
 .card-text {
-  font-size: 1rem;
+  font-size: 1.1rem; /* Aumentado para mejor visibilidad */
   color: #333;
 }
 
 /* Posicionamiento de las tarjetas */
 .custom-position {
-  top: 60%;
-  left: 7%;
-  transform: none;
+  top: 50%; /* Centrado vertical */
+  left: 50%; /* Centrado horizontal */
+  transform: translate(-50%, -50%); /* Centrando completamente */
 }
 
 section .container {

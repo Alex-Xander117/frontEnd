@@ -73,10 +73,10 @@ body {
 
 .login-wrap {
   width: 100%;
-  height: 100vh; /* Asegura que cubra toda la altura de la página */
+  height: 100vh; 
   position: relative;
   background: url(https://elmercantil.com/wp-content/uploads/2020/09/ezgif.com-resize-19.gif) no-repeat center;
-  background-size: cover; /* Cambiar a cover para que la imagen cubra completamente */
+  background-size: cover; 
   background-position: center center;
   background-attachment: fixed;
   box-shadow: 0 30px 40px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
@@ -84,56 +84,64 @@ body {
 
 .login-html {
   width: 100%;
-  max-width: 400px; /* Ajustar el ancho máximo del formulario */
-  height: auto; /* Ajustar la altura automáticamente */
-  margin: auto; /* Centrar el formulario en la página */
-  padding: 40px; /* Agregar padding para el contenido */
-  background: rgba(40, 57, 101, 0.9); /* Fondo semi-transparente */
-  border-radius: 8px; /* Bordes redondeados */
-  position: absolute; /* Posicionar absolutamente */
-  top: 50%; /* Centrar verticalmente */
-  left: 50%; /* Centrar horizontalmente */
-  transform: translate(-50%, -50%); /* Ajustar la posición para centrar */
+  max-width: 400px; 
+  height: auto; 
+  margin: auto; 
+  padding: 40px; 
+  background: rgba(40, 57, 101, 0.95); 
+  border-radius: 10px; 
+  position: absolute; 
+  top: 50%; 
+  left: 50%; 
+  transform: translate(-50%, -50%); 
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .title {
   text-align: center;
-  color: white;
-  margin-bottom: 20px; /* Ajustar margen inferior */
+  color: #ffffff;
+  margin-bottom: 20px; 
 }
 
 .group {
-  margin-bottom: 30px;
+  margin-bottom: 25px;
 }
 
 .group .label {
-  color: #aaa;
-  font-size: 20px;
+  color: #bbb;
+  font-size: 18px;
 }
 
 .group .input {
   width: 100%;
-  padding: 15px 20px;
+  padding: 12px 20px;
   border: none;
-  border-radius: 25px;
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  outline: none;
+  transition: 0.3s ease-in-out;
+}
+
+.group .input:focus {
+  background: rgba(255, 255, 255, 0.25);
 }
 
 .group .button {
   width: 100%;
   padding: 15px 20px;
   border: none;
-  border-radius: 25px;
+  border-radius: 30px;
   background: #1161ee;
-  color: white;
+  color: #ffffff;
   cursor: pointer;
   font-size: 16px;
   font-weight: 600;
+  transition: 0.3s ease;
 }
 
 .group .button:hover {
-  background-color: #0e4bcc;
+  background-color: #0d47a1;
 }
 
 .foot-lnk {
@@ -142,12 +150,11 @@ body {
 }
 
 .foot-lnk p {
-  color: #000000;
-  text-decoration: none;
+  color: #ffffff;
 }
 
 .foot-lnk a {
-  color: #fff;
+  color: #00e5ff;
   text-decoration: none;
 }
 

@@ -109,79 +109,85 @@ body {
 
 .register-wrap {
   width: 100%;
-  height: 100vh; /* Asegurarse de que cubra toda la altura de la ventana */
-  position: relative;
+  height: 100vh; /* Asegura que cubra toda la altura de la ventana */
+  display: flex; /* Utiliza flexbox para centrar el contenido */
+  justify-content: center; /* Centra horizontalmente */
+  align-items: center; /* Centra verticalmente */
   background: url(https://i.makeagif.com/media/3-18-2016/pStRpD.gif) no-repeat center;
-  background-size: cover; /* Cambiar a cover para cubrir todo el contenedor */
+  background-size: cover; /* Ajusta para cubrir todo el contenedor */
   background-attachment: fixed;
 }
 
 .register-html {
   width: 100%;
-  max-width: 400px; /* Cambiado a 400px para que sea más pequeño */
-  padding: 20px 20px; /* Reducido el padding para hacer el recuadro más compacto */
-  background: rgba(40, 57, 101, 0.9);
-  margin: auto; /* Centrar horizontalmente */
-  border-radius: 10px; /* Opcional: Añadir bordes redondeados */
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3); /* Sombra opcional para dar profundidad */
+  max-width: 450px; /* Ajustado para que sea un poco más ancho */
+  padding: 30px; /* Aumentado el padding para un mejor espaciado */
+  background: rgba(40, 57, 101, 0.9); /* Fondo semi-transparente para consistencia con el login */
+  border-radius: 10px; /* Bordes redondeados para un diseño suave */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Sombra para dar profundidad */
 }
 
 .title {
   text-align: center;
-  color: white;
-  margin-bottom: 20px; /* Reducido el margen inferior */
+  color: #ffffff; /* Color blanco para contraste con el fondo */
+  margin-bottom: 20px;
 }
 
 .group {
-  margin-bottom: 15px; /* Reducido el margen inferior de cada grupo */
+  margin-bottom: 20px; /* Espaciado entre cada grupo de formulario */
 }
 
-.group .label {
-  color: #aaa;
-  font-size: 18px; /* Reducido el tamaño de la fuente */
+.group label {
+  color: #ffffff; /* Cambiado a blanco */
+  font-size: 16px; /* Ajustar el tamaño de la fuente si es necesario */
 }
+
 
 .group .input {
   width: 100%;
-  padding: 10px 15px; /* Reducido el padding para hacer el campo más compacto */
+  padding: 12px 20px; /* Ajuste del padding para mejor legibilidad */
   border: none;
   border-radius: 25px;
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
+  background: rgba(255, 255, 255, 0.1); /* Fondo translúcido para estilo consistente */
+  color: #ffffff;
+}
+
+.group .input:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.2); /* Cambio ligero de fondo al enfocarse */
 }
 
 .group .button {
   width: 100%;
-  padding: 10px 15px; /* Reducido el padding para hacer el botón más compacto */
+  padding: 15px 20px; /* Botón con mayor padding para facilidad de uso */
   border: none;
   border-radius: 25px;
-  background: #1161ee;
-  color: white;
+  background: #1161ee; /* Color de botón consistente con el estilo general */
+  color: #ffffff;
   cursor: pointer;
   font-size: 16px;
   font-weight: 600;
 }
 
 .group .button:hover {
-  background-color: #0e4bcc;
+  background-color: #0e4bcc; /* Cambio de color en hover para dar retroalimentación visual */
 }
 
 .foot-lnk {
   text-align: center;
-  margin-top: 10px; /* Reducido el margen superior */
+  margin-top: 15px; /* Ajustado el margen superior */
 }
 
 .foot-lnk p {
-  color: #000000;
-  text-decoration: none;
+  color: #dddddd; /* Texto gris claro */
 }
 
 .foot-lnk a {
-  color: #fff;
+  color: #00e5ff; /* Color del enlace consistente con el login */
   text-decoration: none;
 }
 
 .foot-lnk a:hover {
-  text-decoration: underline;
+  text-decoration: underline; /* Subrayado al pasar el mouse */
 }
 </style>

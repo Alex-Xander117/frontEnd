@@ -235,6 +235,7 @@ const eliminarProducto = async (id) => {
   align-items: center; /* Centrado vertical */
   min-height: 100vh;
   height: 100%; /* Asegura que ocupe toda la altura disponible */
+  padding-top: 40px;
 }
 
 /* Card styling */

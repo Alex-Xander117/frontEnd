@@ -1,4 +1,5 @@
 <template>
+  <div class="terms-wrap">
     <div class="terms-container">
       <h1>Términos y Condiciones</h1>
       <p>
@@ -25,30 +26,59 @@
       </p>
       <router-link to="/register">Regresar al registro</router-link>
     </div>
-  </template>
-  
-  <script setup>
-  </script>
-  
-  <style scoped>
-  .terms-container {
-    max-width: 600px;
-    margin: 20px auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-  }
-  
-  h1 {
-    text-align: center;
-  }
-  
-  h2 {
-    margin-top: 20px;
-  }
-  
-  p {
-    margin: 10px 0;
-  }
-  </style>
-  
+  </div>
+</template>
+
+<script setup>
+</script>
+
+<style scoped>
+body {
+  margin: 0;
+  color: #6a6f8c;
+  font: 600 16px/18px 'Open Sans', sans-serif;
+}
+
+.terms-wrap {
+  width: 100%;
+  height: 100vh; /* Asegurarse de que cubra toda la altura de la ventana */
+  position: relative;
+  overflow: hidden; /* Evitar que la imagen se desborde */
+  background: url(https://jit.com.co/wp-content/uploads/2023/06/Personal-capacitado-en-accion-en-la-bodega-logistica-1.jpg) no-repeat center center fixed; /* Fijar la imagen en el centro */
+  background-size: cover; /* Cambiar a cover para cubrir todo el contenedor */
+}
+ 
+.terms-container {
+  max-width: 800px; /* Ampliar el ancho del cuadro */
+  margin: 20px auto; /* Centrar el cuadro */
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.8); /* Fondo blanco semi-transparente */
+  color: #333; /* Color de texto oscuro para mayor legibilidad */
+  border-radius: 10px;
+  border: 1px solid #ccc; /* Borde opcional */
+  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.5); /* Difuminado blanco alrededor */
+}
+
+h1 {
+  text-align: center;
+}
+
+h2 {
+  margin-top: 20px;
+}
+
+p {
+  margin: 10px 0;
+}
+
+.router-link {
+  display: block;
+  text-align: center;
+  margin-top: 20px;
+  color: #00aaff; /* Color del enlace */
+}
+
+.router-link:hover {
+  text-decoration: underline; /* Subrayado al pasar el mouse */
+}
+</style>

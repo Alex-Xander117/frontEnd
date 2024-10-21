@@ -84,8 +84,6 @@ const handleRegister = async () => {
       console.log('Usuario registrado con éxito:', response.data);
       localStorage.setItem('userName', nombre.value);
       router.push('/login');
-      // Redirigir al register después del registro
-      router.push({ name: 'register' });
     } else {
       console.error('Error en el registro:', response.status);
     }
@@ -111,43 +109,41 @@ body {
 
 .register-wrap {
   width: 100%;
-  margin: auto;
-  max-width: 720px;
-  min-height: 870px;
+  height: 100vh; /* Asegurarse de que cubra toda la altura de la ventana */
   position: relative;
-  background: url(https://static.vecteezy.com/system/resources/previews/003/216/275/large_2x/inventory-control-illustration-concept-vector.jpg) no-repeat center;
-  background-size: 800px;
-  background-position: center center;
+  background: url(https://i.makeagif.com/media/3-18-2016/pStRpD.gif) no-repeat center;
+  background-size: cover; /* Cambiar a cover para cubrir todo el contenedor */
   background-attachment: fixed;
-  box-shadow: 0 30px 40px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
 }
 
 .register-html {
   width: 100%;
-  height: 100%;
-  position: absolute;
-  padding: 90px 70px 50px 70px;
+  max-width: 400px; /* Cambiado a 400px para que sea más pequeño */
+  padding: 20px 20px; /* Reducido el padding para hacer el recuadro más compacto */
   background: rgba(40, 57, 101, 0.9);
+  margin: auto; /* Centrar horizontalmente */
+  border-radius: 10px; /* Opcional: Añadir bordes redondeados */
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3); /* Sombra opcional para dar profundidad */
 }
 
 .title {
   text-align: center;
   color: white;
-  margin-bottom: 40px;
+  margin-bottom: 20px; /* Reducido el margen inferior */
 }
 
 .group {
-  margin-bottom: 30px;
+  margin-bottom: 15px; /* Reducido el margen inferior de cada grupo */
 }
 
 .group .label {
   color: #aaa;
-  font-size: 20px;
+  font-size: 18px; /* Reducido el tamaño de la fuente */
 }
 
 .group .input {
   width: 100%;
-  padding: 15px 20px;
+  padding: 10px 15px; /* Reducido el padding para hacer el campo más compacto */
   border: none;
   border-radius: 25px;
   background: rgba(255, 255, 255, 0.1);
@@ -156,7 +152,7 @@ body {
 
 .group .button {
   width: 100%;
-  padding: 15px 20px;
+  padding: 10px 15px; /* Reducido el padding para hacer el botón más compacto */
   border: none;
   border-radius: 25px;
   background: #1161ee;
@@ -172,7 +168,7 @@ body {
 
 .foot-lnk {
   text-align: center;
-  margin-top: 20px;
+  margin-top: 10px; /* Reducido el margen superior */
 }
 
 .foot-lnk p {

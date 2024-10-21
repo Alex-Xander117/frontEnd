@@ -1,7 +1,6 @@
 <template>
   <div class="login-wrap">
     <div class="login-html">
-
       <h2 class="title">Inicio de sesión</h2>
 
       <form @submit.prevent="handleLogin">
@@ -47,7 +46,7 @@ const handleLogin = async () => {
       // Si la respuesta contiene el token, guardarlo
       localStorage.setItem('authToken', response.token);
       localStorage.setItem('userName', response.nombre);
-      router.push('/dashboard');
+      router.push('/home'); // Cambiar a /home
     } else {
       console.error('Error al iniciar sesión');
     }
@@ -56,7 +55,6 @@ const handleLogin = async () => {
     alert(error.message); // Muestra un mensaje al usuario
   }
 };
-
 </script>
 
 <style scoped>
@@ -75,12 +73,10 @@ body {
 
 .login-wrap {
   width: 100%;
-  margin: auto;
-  max-width: 700px;
-  min-height: 670px;
+  height: 100vh; /* Asegura que cubra toda la altura de la página */
   position: relative;
-  background: url(https://static.vecteezy.com/system/resources/previews/003/216/275/large_2x/inventory-control-illustration-concept-vector.jpg) no-repeat center;
-  background-size: 800px; /* Escala la imagen para cubrir completamente el contenedor */
+  background: url(https://elmercantil.com/wp-content/uploads/2020/09/ezgif.com-resize-19.gif) no-repeat center;
+  background-size: cover; /* Cambiar a cover para que la imagen cubra completamente */
   background-position: center center;
   background-attachment: fixed;
   box-shadow: 0 30px 40px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
@@ -88,16 +84,22 @@ body {
 
 .login-html {
   width: 100%;
-  height: 100%;
-  position: absolute;
-  padding: 90px 70px 50px 70px;
-  background: rgba(40, 57, 101, 0.9);
+  max-width: 400px; /* Ajustar el ancho máximo del formulario */
+  height: auto; /* Ajustar la altura automáticamente */
+  margin: auto; /* Centrar el formulario en la página */
+  padding: 40px; /* Agregar padding para el contenido */
+  background: rgba(40, 57, 101, 0.9); /* Fondo semi-transparente */
+  border-radius: 8px; /* Bordes redondeados */
+  position: absolute; /* Posicionar absolutamente */
+  top: 50%; /* Centrar verticalmente */
+  left: 50%; /* Centrar horizontalmente */
+  transform: translate(-50%, -50%); /* Ajustar la posición para centrar */
 }
 
 .title {
   text-align: center;
   color: white;
-  margin-bottom: 40px;
+  margin-bottom: 20px; /* Ajustar margen inferior */
 }
 
 .group {

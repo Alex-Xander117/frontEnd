@@ -52,8 +52,8 @@
               <div class="card custom-card">
                 <div class="card-body">
                   <h5 class="card-title">Opciones de Producto</h5>
-                  <button @click="agregarProducto" class="btn btn-primary mt-3 w-100 mb-3">Agregar Producto</button>
-                  <button @click="mostrarInformacion" class="btn btn-info mt-3 w-100 mb-3">Mostrar Información</button>
+                  <button @click="agregarProducto" class="btn btn-primary mt-3 w-100 mb-3 btn-block">Agregar Producto</button>
+                  <button @click="mostrarInformacion" class="btn btn-info mt-3 w-100 mb-3 btn-block">Mostrar Información</button>
                 </div>
               </div>
             </div>
@@ -85,8 +85,8 @@
                         <td><input v-model="producto.precio" placeholder="Precio" class="form-control" /></td>
                         <td><input v-model="producto.cantidad_stock" placeholder="Stock" class="form-control" /></td>
                         <td>
-                          <button @click="actualizarProducto(producto.id)" class="btn btn-success">Actualizar</button>
-                          <button @click="eliminarProducto(producto.id)" class="btn btn-danger">Eliminar</button>
+                          <button @click="actualizarProducto(producto.id, producto)" class="btn btn-success btn-block">Actualizar</button>
+                          <button @click="eliminarProducto(producto.id)" class="btn btn-danger btn-block">Eliminar</button>
                         </td>
                       </tr>
                     </tbody>
@@ -153,7 +153,7 @@ const handleLogout = () => {
 const obtenerProductos = async () => {
   try {
     const response = await ApiService.obtenerProductos();
-    console.log(response.data); // Verifica la respuesta aquí
+    console.log(response); // Verifica la respuesta aquí
     productos.value = response || []; // Asegúrate de manejar el caso de undefined
   } catch (error) {
     console.error('Error fetching data:', error);
@@ -179,16 +179,23 @@ const guardarNuevoProducto = async () => {
   }
 };
 
-const actualizarProducto = async (id) => {
-  const producto = productos.value.find(p => p.id === id);
+
+const actualizarProducto = async (id, producto) => {
+  console.log("Producto a actualizar:", producto); // Verifica el objeto completo
+  console.log("ID del producto:", id); // Verifica que el ID es el correcto
+  producto.precio = parseFloat(producto.precio)
+  producto.cantidad_stock = parseFloat(producto.cantidad_stock)
   try {
     const response = await ApiService.actualizarProducto(id, producto);
-    const index = productos.value.findIndex(p => p.id === id);
-    productos.value[index] = response.data;
+    console.log(response)
   } catch (error) {
-    console.error('Error al actualizar producto:', error);
+    console.error('Error al agregar producto:', error);
   }
+
 };
+
+
+
 
 const eliminarProducto = async (id) => {
   try {

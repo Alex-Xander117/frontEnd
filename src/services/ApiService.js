@@ -65,5 +65,18 @@ export default {
       } catch (error) {
         console.error('Error al eliminar producto', error.response || error.message);
       }
+    },
+    async actualizarProducto(id, producto) { // Cambié el orden para que el ID venga primero
+      console.log("producto desde api", producto)
+      console.log("id desdes el api", id)
+      try {
+        // Realiza una solicitud PUT al servidor para actualizar un producto
+        const response = await axios.put(`${API_URL}/productos/${id}`, producto);
+        return response.data; // Retorna la respuesta del servidor si es exitosa
+      } catch (error) {
+        console.error('Error al actualizar el producto en ApiService:', error);
+        throw error; // Lanza el error para que pueda ser manejado por el componente
+      }
     }
+  
 };

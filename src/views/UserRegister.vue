@@ -1,7 +1,9 @@
 <template>
-  <div class="register-wrap">
-    <div class="register-html">
+  <div class="grid-background">
+    <!-- Fondo de cuadros dinámicos -->
+    <div v-for="n in rows * columns" :key="n" class="grid-item" @mouseover="hoverSquare"></div>
 
+    <div class="register-html">
       <h2 class="title">Registro</h2>
 
       <form @submit.prevent="handleRegister">
@@ -63,6 +65,10 @@ const password = ref('');
 const acceptTerms = ref(false);
 const router = useRouter();
 
+// Número de filas y columnas de la cuadrícula dinámica
+const rows = 12;
+const columns = 12;
+
 // Función para manejar el registro de usuario
 const handleRegister = async () => {
   try {
@@ -91,40 +97,59 @@ const handleRegister = async () => {
     console.error('Error durante el registro:', error);
   }
 };
+
+// Función para cambiar el color de los cuadrados al pasar el mouse
+const hoverSquare = (event) => {
+  event.target.style.backgroundColor = '#65c7c2'; // Cambia el color al pasar el cursor
+  setTimeout(() => {
+    event.target.style.backgroundColor = ''; // Restablece el color después de un tiempo
+  }, 500); // El tiempo que permanece el color
+};
 </script>
 
 <style scoped>
-body {
-  margin: 0;
-  color: #6a6f8c;
-  background: #c8c8c8;
-  font: 600 16px/18px 'Open Sans', sans-serif;
+/* Fondo de cuadrícula dinámica */
+.grid-background {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  width: 100vw;
+  height: 100vh;
+  background-color: #111111;
+  position: relative;
 }
 
-*,
-:after,
-:before {
-  box-sizing: border-box;
+.grid-item {
+  border: 1px solid rgba(255, 0, 0, 0.1);
+  transition: background-color 0.2s ease;
+  animation: gradientBorder 3s linear infinite; /* Animación de borde */
 }
 
-.register-wrap {
-  width: 100%;
-  height: 100vh; /* Asegura que cubra toda la altura de la ventana */
-  display: flex; /* Utiliza flexbox para centrar el contenido */
-  justify-content: center; /* Centra horizontalmente */
-  align-items: center; /* Centra verticalmente */
-  background: url(https://i.makeagif.com/media/3-18-2016/pStRpD.gif) no-repeat center;
-  background-size: cover; /* Ajusta para cubrir todo el contenedor */
-  background-attachment: fixed;
+/* Definición de la animación para el gradiente */
+@keyframes gradientBorder {
+  0% {
+    border-color: rgba(20, 20, 20, 1);
+  }
+  50% {
+    border-color: rgb(255, 255, 255);
+  }
+  100% {
+    border-color: rgba(20, 20, 20, 1);
+  }
 }
 
+/* Formulario de registro */
 .register-html {
   width: 100%;
   max-width: 450px; /* Ajustado para que sea un poco más ancho */
   padding: 30px; /* Aumentado el padding para un mejor espaciado */
-  background: rgba(40, 57, 101, 0.9); /* Fondo semi-transparente para consistencia con el login */
-  border-radius: 10px; /* Bordes redondeados para un diseño suave */
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Sombra para dar profundidad */
+  background: rgba(40, 57, 101, 0.9); /* Fondo semi-transparente */
+  border-radius: 10px; /* Bordes redondeados */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Sombra */
+  position: absolute; 
+  top: 50%; 
+  left: 50%; 
+  transform: translate(-50%, -50%); /* Centramos el formulario */
 }
 
 .title {
@@ -141,7 +166,6 @@ body {
   color: #ffffff; /* Cambiado a blanco */
   font-size: 16px; /* Ajustar el tamaño de la fuente si es necesario */
 }
-
 
 .group .input {
   width: 100%;
@@ -162,7 +186,7 @@ body {
   padding: 15px 20px; /* Botón con mayor padding para facilidad de uso */
   border: none;
   border-radius: 25px;
-  background: #1161ee; /* Color de botón consistente con el estilo general */
+  background: #1161ee; /* Color de botón */
   color: #ffffff;
   cursor: pointer;
   font-size: 16px;
@@ -170,7 +194,7 @@ body {
 }
 
 .group .button:hover {
-  background-color: #0e4bcc; /* Cambio de color en hover para dar retroalimentación visual */
+  background-color: #0e4bcc; /* Cambio de color en hover */
 }
 
 .foot-lnk {
@@ -183,7 +207,7 @@ body {
 }
 
 .foot-lnk a {
-  color: #00e5ff; /* Color del enlace consistente con el login */
+  color: #00e5ff; /* Color del enlace */
   text-decoration: none;
 }
 

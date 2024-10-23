@@ -1,5 +1,8 @@
 <template>
-  <div class="login-wrap">
+  <div class="grid-background">
+    <!-- Fondo de cuadros dinámicos -->
+    <div v-for="n in rows * columns" :key="n" class="grid-item" @mouseover="hoverSquare"></div>
+
     <div class="login-html">
       <h2 class="title">Inicio de sesión</h2>
 
@@ -35,6 +38,8 @@ import ApiService from '../services/ApiService';  // Importar el servicio ApiSer
 const email = ref('');
 const password = ref('');
 const router = useRouter();  // Usar el enrutador de Vue para redirigir
+const rows = 12;  // Número de filas de la cuadrícula
+const columns = 12;  // Número de columnas de la cuadrícula
 
 // Función para manejar el inicio de sesión
 const handleLogin = async () => {
@@ -59,33 +64,47 @@ const handleLogin = async () => {
     alert(error.message); // Muestra un mensaje al usuario
   }
 };
+
+const hoverSquare = (event) => {
+  event.target.style.backgroundColor = '#65c7c2'; // Cambia el color al pasar el cursor
+  setTimeout(() => {
+    event.target.style.backgroundColor = ''; // Restablece el color después de un tiempo
+  }, 500); // El tiempo que permanece el color
+};
 </script>
 
 <style scoped>
-body {
-  margin: 0;
-  color: #6a6f8c;
-  background: #c8c8c8;
-  font: 600 16px/18px 'Open Sans', sans-serif;
-}
-
-*,
-:after,
-:before {
-  box-sizing: border-box;
-}
-
-.login-wrap {
-  width: 100%;
-  height: 100vh; 
+/* Fondo de cuadrícula */
+.grid-background {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  width: 100vw;
+  height: 100vh;
+  background-color: #111111;
   position: relative;
-  background: url(https://elmercantil.com/wp-content/uploads/2020/09/ezgif.com-resize-19.gif) no-repeat center;
-  background-size: cover; 
-  background-position: center center;
-  background-attachment: fixed;
-  box-shadow: 0 30px 40px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
 }
 
+.grid-item {
+  border: 1px solid rgba(255, 0, 0, 0.1);
+  transition: background-color 0.2s ease;
+  animation: gradientBorder 3s linear infinite; /* Animación de borde */
+}
+
+/* Definición de la animación para el gradiente */
+@keyframes gradientBorder {
+  0% {
+    border-color: rgba(20, 20, 20, 1);
+  }
+  50% {
+    border-color: rgb(255, 255, 255);
+  }
+  100% {
+    border-color: rgba(20, 20, 20, 1);
+  }
+}
+
+/* Formulario de inicio de sesión */
 .login-html {
   width: 100%;
   max-width: 400px; 

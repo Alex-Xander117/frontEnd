@@ -1,0 +1,38 @@
+[
+    {
+        "nombre": "Andres Felipe",
+        "apellidos": "Gutierrez",
+        "edad": 21,
+        "profesion": "Estudiante (universitario)",
+        "universidad": "Universidad Santiago de Cali",
+        "email": "andres.gutierrez14@usc.edu.co",
+        "imagen": "https://th.bing.com/th/id/OIP.pt2EwRjEnWlejWq2vOMWZQHaE8?rs=1&pid=ImgDetMain"
+    },
+    {
+        "nombre": "Juan Felipe",
+        "apellidos": "Calvache",
+        "edad": 27,
+        "profesion": "Estudiante (universitario)",
+        "universidad": "Universidad Santiago de Cali",
+        "email": "juan.calvache00@usc.edu.co",
+        "imagen": "https://www.elcolombiano.com/binrepository/638x562/0c0/0d0/none/11101/CQOF/archive-fotos-1-10933834-d693a8303bc6ae8f879e1ef90984c681_40705536_20220918180837.jpg"
+    },
+    {
+        "nombre": "Alexander",
+        "apellidos": "Quintana",
+        "edad": 21,
+        "profesion": "Estudiante (universitario)",
+        "universidad": "Universidad Santiago de Cali",
+        "email": "alexander.quintana00@usc.edu.co",
+        "imagen": "https://assets.bwbx.io/images/users/iqjWHBFdfxIU/iiNm7iWq75TA/v1/-1x-1.jpg"
+    },
+    {
+        "nombre": "No me acuerdo",
+        "apellidos": "Me sigo sin acordar",
+        "edad": 20,
+        "profesion": "Estudiante (universitario)",
+        "universidad": "Universidad Santiago de Cali",
+        "email": "n.i14@usc.edu.co",
+        "imagen": "https://rtvc-assets-radionacional-v2.s3.amazonaws.com/s3fs-public/styles/imagen_720x720/public/senalradio/articulo-noticia/galeriaimagen/alvaro_uribe.jpg?itok=LjR1xWaY&timestamp=1533327149"
+    }
+]

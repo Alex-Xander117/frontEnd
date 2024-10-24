@@ -4,6 +4,7 @@ import Register from '../views/UserRegister.vue';
 import HomeView from '../views/HomeView.vue';
 import TermsAndConditions from '../views/TermsAndConditions.vue';
 import SeriviceView from '../views/ServiceView.vue';
+import TeamView from '@/views/TeamView.vue';
 
 //hola que hace
 const routes = [
@@ -35,6 +36,11 @@ const routes = [
     path: '/service',
     name: 'Service',
     component: SeriviceView,
+  },
+  {
+    path: '/team',
+    name: 'Team',
+    component: TeamView,
   },
 ];
 

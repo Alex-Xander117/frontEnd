@@ -18,6 +18,15 @@
         </div>
 
         <div class="group">
+          <label for="rol" class="label">Rol</label>
+          <!-- Cambiado input por select -->
+          <select id="rol" class="input select-input" v-model="rol" required>
+            <option value="Usuario" class="option-style">Usuario</option>
+            <option value="Administrador" class="option-style">Administrador</option>
+          </select>
+        </div>
+
+        <div class="group">
           <label for="cedula" class="label">Cédula</label>
           <input type="text" id="cedula" class="input" v-model="cedula" required />
         </div>
@@ -56,34 +65,32 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import ApiService from '../services/ApiService';
 
-// Definir variables reactivas
 const nombre = ref('');
 const correo = ref('');
 const cedula = ref('');
+const rol = ref('');
 const telefono = ref('');
 const password = ref('');
 const acceptTerms = ref(false);
 const router = useRouter();
 
-// Número de filas y columnas de la cuadrícula dinámica
 const rows = 12;
 const columns = 12;
 
-// Función para manejar el registro de usuario
 const handleRegister = async () => {
   try {
     const user = {
       nombre: nombre.value,
       correo: correo.value,
       password: password.value,
+      rol: rol.value,
       cedula: cedula.value,
       telefono: telefono.value,
-      creadoPor: 'system',  // Valor por defecto o variable según sea necesario
+      creadoPor: 'system',
       editadoPor: 'system',
       aceptaterminos: acceptTerms.value
     };
 
-    // Llamar al servicio API para registrar el usuario
     const response = await ApiService.setUser(user);
     
     if (response.status === 201) {
@@ -98,12 +105,11 @@ const handleRegister = async () => {
   }
 };
 
-// Función para cambiar el color de los cuadrados al pasar el mouse
 const hoverSquare = (event) => {
-  event.target.style.backgroundColor = '#65c7c2'; // Cambia el color al pasar el cursor
+  event.target.style.backgroundColor = '#65c7c2';
   setTimeout(() => {
-    event.target.style.backgroundColor = ''; // Restablece el color después de un tiempo
-  }, 500); // El tiempo que permanece el color
+    event.target.style.backgroundColor = '';
+  }, 500);
 };
 </script>
 
@@ -122,10 +128,9 @@ const hoverSquare = (event) => {
 .grid-item {
   border: 1px solid rgba(255, 0, 0, 0.1);
   transition: background-color 0.2s ease;
-  animation: gradientBorder 3s linear infinite; /* Animación de borde */
+  animation: gradientBorder 3s linear infinite;
 }
 
-/* Definición de la animación para el gradiente */
 @keyframes gradientBorder {
   0% {
     border-color: rgba(20, 20, 20, 1);
@@ -138,55 +143,64 @@ const hoverSquare = (event) => {
   }
 }
 
-/* Formulario de registro */
 .register-html {
   width: 100%;
-  max-width: 450px; /* Ajustado para que sea un poco más ancho */
-  padding: 30px; /* Aumentado el padding para un mejor espaciado */
-  background: rgba(40, 57, 101, 0.9); /* Fondo semi-transparente */
-  border-radius: 10px; /* Bordes redondeados */
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Sombra */
+  max-width: 450px;
+  padding: 30px;
+  background: rgba(40, 57, 101, 0.9);
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   position: absolute; 
   top: 50%; 
   left: 50%; 
-  transform: translate(-50%, -50%); /* Centramos el formulario */
+  transform: translate(-50%, -50%);
 }
 
 .title {
   text-align: center;
-  color: #ffffff; /* Color blanco para contraste con el fondo */
+  color: #ffffff;
   margin-bottom: 20px;
 }
 
 .group {
-  margin-bottom: 20px; /* Espaciado entre cada grupo de formulario */
+  margin-bottom: 20px;
 }
 
 .group label {
-  color: #ffffff; /* Cambiado a blanco */
-  font-size: 16px; /* Ajustar el tamaño de la fuente si es necesario */
+  color: #ffffff;
+  font-size: 16px;
 }
 
 .group .input {
   width: 100%;
-  padding: 12px 20px; /* Ajuste del padding para mejor legibilidad */
+  padding: 12px 20px;
   border: none;
   border-radius: 25px;
-  background: rgba(255, 255, 255, 0.1); /* Fondo translúcido para estilo consistente */
+  background: rgba(255, 255, 255, 0.1);
   color: #ffffff;
 }
 
 .group .input:focus {
   outline: none;
-  background: rgba(255, 255, 255, 0.2); /* Cambio ligero de fondo al enfocarse */
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.group .select-input {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.group .select-input option {
+  color: #333333; /* Color de las opciones */
+  background: #ffffff; /* Fondo de las opciones */
 }
 
 .group .button {
   width: 100%;
-  padding: 15px 20px; /* Botón con mayor padding para facilidad de uso */
+  padding: 15px 20px;
   border: none;
   border-radius: 25px;
-  background: #1161ee; /* Color de botón */
+  background: #1161ee;
   color: #ffffff;
   cursor: pointer;
   font-size: 16px;
@@ -194,24 +208,24 @@ const hoverSquare = (event) => {
 }
 
 .group .button:hover {
-  background-color: #0e4bcc; /* Cambio de color en hover */
+  background-color: #0e4bcc;
 }
 
 .foot-lnk {
   text-align: center;
-  margin-top: 15px; /* Ajustado el margen superior */
+  margin-top: 15px;
 }
 
 .foot-lnk p {
-  color: #dddddd; /* Texto gris claro */
+  color: #dddddd;
 }
 
 .foot-lnk a {
-  color: #00e5ff; /* Color del enlace */
+  color: #00e5ff;
   text-decoration: none;
 }
 
 .foot-lnk a:hover {
-  text-decoration: underline; /* Subrayado al pasar el mouse */
+  text-decoration: underline;
 }
 </style>

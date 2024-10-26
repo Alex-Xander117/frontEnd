@@ -48,6 +48,7 @@ const handleRegister = async () => {
       nombre: nombre.value,
       correo: correo.value,
       password: password.value,
+      rol: rol.value,
       cedula: cedula.value,
       telefono: telefono.value,
       creadoPor: 'system',

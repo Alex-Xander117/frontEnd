@@ -231,6 +231,8 @@ const eliminarProducto = async (id) => {
   background-position: center;
   position: relative;
   z-index: 1;
+  height: 100vh; /* Asegura que ocupe toda la altura de la ventana */
+  overflow: hidden; /* Evita el espacio blanco */
   box-shadow: inset 0 0 100px 50px rgba(0, 0, 0, 0.7);
 }
 

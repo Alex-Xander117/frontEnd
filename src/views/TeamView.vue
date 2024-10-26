@@ -20,10 +20,6 @@
                         <li class="nav-item">
                             <router-link to="/team" class="nav-link">Equipo</router-link>
                         </li>
-
-                        <li class="nav-item">
-                            <router-link to="/contact" class="nav-link">Contacto</router-link>
-                        </li>
                     </ul>
 
                     <ul class="navbar-nav d-flex flex-row">

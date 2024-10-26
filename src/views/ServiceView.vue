@@ -14,13 +14,12 @@
             <li class="nav-item">
               <router-link to="/service" class="nav-link">Servicios</router-link>
             </li>
+
             <li class="nav-item">
               <router-link to="/team" class="nav-link">Equipo</router-link>
             </li>
-            <li class="nav-item">
-              <router-link to="/contact" class="nav-link">Contacto</router-link>
-            </li>
           </ul>
+          
           <ul class="navbar-nav d-flex flex-row">
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">

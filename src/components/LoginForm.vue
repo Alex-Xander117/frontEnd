@@ -31,10 +31,9 @@ const handleLogin = async () => {
     // Llamar a loginUser con las credenciales
     const response = await ApiService.login({ correo: email.value, password: password.value });
     
-    if (response && response.token) {
+    if (response) {
       // Si la respuesta contiene el token, guardarlo
-      localStorage.setItem('authToken', response.token);
-      localStorage.setItem('username', response.nombre);
+      localStorage.setItem('nombre', response.nombre);
       router.push('/home');
     } else {
       console.error('Error al iniciar sesión');

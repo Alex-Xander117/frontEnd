@@ -31,7 +31,7 @@
 
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                 <li class="dropdown-item">
-                  <strong>{{ userName }}</strong> <!-- Muestra el nombre del usuario aquí -->
+                  <strong>{{ nombre }}</strong> <!-- Muestra el nombre del usuario aquí -->
                 </li>
 
                 <li><router-link class="dropdown-item" to="/profile">Ver perfil</router-link></li>
@@ -92,14 +92,15 @@ import { useRouter } from 'vue-router';
 
 const isNavbarOpen = ref(false);
 const router = useRouter();
-const userName = ref(''); // Almacenar el nombre del usuario
+const nombre = ref(''); // Almacenar el nombre del usuario
 
 // Función para cargar el nombre del usuario al montar el componente
 onMounted(() => {
-  userName.value = localStorage.getItem('username') || 'Invitado';
-  console.log('Nombre de usuario cargado:', userName.value); // Para depurar
+  nombre.value = localStorage.getItem('nombre');
+  console.log(localStorage.usuario)
+  console.log('Nombre de usuario cargado:', nombre.value); // Para depurar
 });
-
+ 
 
 // Función para alternar la visibilidad del menú de navegación
 const toggleNavbar = () => {
@@ -109,8 +110,8 @@ const toggleNavbar = () => {
 // Función para cerrar sesión
 const handleLogout = () => {
   if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
-    localStorage.removeItem('username'); // Eliminar el nombre del usuario
-    localStorage.removeItem('authToken'); // También eliminar el token de autenticación
+    localStorage.removeItem('email'); // Eliminar el nombre del usuario
+    localStorage.removeItem('nombre');
     router.push('/login'); // Redirigir al login
   }
 };

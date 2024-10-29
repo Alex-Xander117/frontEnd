@@ -2,20 +2,23 @@
   <div class="dashboard-container">
     <div class="header">
       <div class="username">
-        Bienvenido, {{ username }}
+        Bienvenido, {{ nombre }}
       </div>
       <button @click="handleLogout">Cerrar sesión</button>
     </div>
-    <h1 class="welcome-title">Bienvenido a nuestra herramienta de gestión</h1>
+    <h1 class="welcome-title">Bienvenido a nuestra herramienta de gestión {{ nombre }}</h1>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted} from 'vue';
 import { useRouter } from 'vue-router';
 
 // Obtener el nombre del usuario desde localStorage
-const username = ref(localStorage.getItem('username'));
+const nombre = ref('');
+onMounted(() =>{
+  nombre.value = localStorage.getItem('nombre');
+});
 
 // Usar el enrutador de Vue
 const router = useRouter();

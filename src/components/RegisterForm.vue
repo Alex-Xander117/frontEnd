@@ -8,6 +8,9 @@
       <label for="email">Email:</label>
       <input type="email" id="email" v-model="correo" required />
 
+      <label for="email">Email:</label>
+      <input type="email" id="email" v-model="correo" required />
+
       <label for="cedula">Cédula:</label>
       <input type="text" id="cedula" v-model="cedula" required />
 
@@ -36,6 +39,7 @@ import ApiService from '../services/ApiService';
 
 const nombre = ref('');
 const correo = ref('');
+const rol = ref('');
 const cedula = ref('');
 const telefono = ref('');
 const password = ref('');
@@ -48,6 +52,7 @@ const handleRegister = async () => {
       nombre: nombre.value,
       correo: correo.value,
       password: password.value,
+      rol: rol.value,
       cedula: cedula.value,
       telefono: telefono.value,
       creadoPor: 'system',

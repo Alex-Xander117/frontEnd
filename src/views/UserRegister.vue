@@ -83,12 +83,12 @@ const handleRegister = async () => {
       nombre: nombre.value,
       correo: correo.value,
       password: password.value,
-      rol: rol.value,
       cedula: cedula.value,
       telefono: telefono.value,
       creadoPor: 'system',
       editadoPor: 'system',
-      aceptaterminos: acceptTerms.value
+      aceptaterminos: acceptTerms.value,
+      rol: rol.value
     };
 
     const response = await ApiService.setUser(user);

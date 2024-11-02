@@ -27,7 +27,7 @@
               </a>
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                 <li class="dropdown-item">
-                  <strong>{{ userName }}</strong>
+                  <strong>{{ nombre }}</strong>
                 </li>
                 <li><router-link class="dropdown-item" to="/profile">Ver perfil</router-link></li>
                 <li><a class="dropdown-item" @click="handleLogout">Cerrar sesión</a></li>
@@ -120,7 +120,7 @@ import ApiService from '@/services/ApiService';
 
 const isNavbarOpen = ref(false);
 const router = useRouter();
-const userName = ref('');
+const nombre = ref('');
 const productos =  ref([]);
 const mostrarInformacionFlag = ref(true); // Bandera para saber si mostrar productos o formulario
 const nuevoProducto = ref({
@@ -131,7 +131,7 @@ const nuevoProducto = ref({
 });
 
 onMounted(async () => {
-  userName.value = localStorage.getItem('userName') || 'Invitado';
+  nombre.value = localStorage.getItem('nombre');
   await obtenerProductos();
 });
 

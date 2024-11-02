@@ -31,7 +31,7 @@
 
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                                 <li class="dropdown-item">
-                                    <strong>{{ userName }}</strong> <!-- Muestra el nombre del usuario aquí -->
+                                    <strong>{{ nombre }}</strong> <!-- Muestra el nombre del usuario aquí -->
                                 </li>
 
                                 <li><router-link class="dropdown-item" to="/profile">Ver perfil</router-link></li>
@@ -71,11 +71,12 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import personalDataJson from '@/assets/Equipo/Team.json';  // Ajustamos la ruta para cargar el archivo correctamente
-
+const nombre = ref('')
 const personalData = ref([]);
 
 onMounted(() => {
     personalData.value = personalDataJson;
+    nombre.value = localStorage.getItem('nombre');
 });
 </script>
 

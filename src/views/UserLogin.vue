@@ -45,14 +45,16 @@ const columns = 12;  // Número de columnas de la cuadrícula
 const handleLogin = async () => {
   try {
     // Llamar a loginUser con las credenciales
-    const response = await ApiService.login({ email: email.value, password: password.value });
+    const response = await ApiService.login({email: email.value, password: password.value });
     
-    if (response && response.token) {
+    if (response) {
       // Si la respuesta contiene el token, guardarlo
-      localStorage.setItem('authToken', response.token);
-      localStorage.setItem('userName', response.nombre);
+      localStorage.setItem('email', email.value);//creo que el problema es de aca se tiene que setear desde aca
+      localStorage.setItem('nombre', response.nombre);
+      
 
       console.log(response); // Verifica si el campo "nombre" está presente
+
 
       router.push('/home');
 

@@ -14,7 +14,6 @@
             <li class="nav-item">
               <router-link to="/service" class="nav-link">Servicios</router-link>
             </li>
-
             <li class="nav-item">
               <router-link to="/team" class="nav-link">Equipo</router-link>
             </li>
@@ -46,20 +45,54 @@
         <!-- Contenedor Principal -->
         <div class="container main-content mt-5">
           <div class="row">
-            <!-- Primer cuadro con botones -->
+            <!-- Cuadro de Opciones de Producto -->
             <div class="col-md-4">
               <div class="card custom-card">
                 <div class="card-body">
                   <h5 class="card-title">Opciones de Producto</h5>
                   <button @click="agregarProducto" class="btn btn-primary mt-3 w-100 mb-3 btn-block">Agregar Producto</button>
                   <button @click="mostrarInformacion" class="btn btn-info mt-3 w-100 mb-3 btn-block">Mostrar Información</button>
+                  <button @click="mostrarVentas" class="btn btn-success mt-3 w-100 mb-3 btn-block">Ventas</button>
                 </div>
               </div>
             </div>
 
-            <!-- Segundo cuadro para mostrar la información o formulario -->
+            <!-- Segundo cuadro para mostrar información, agregar producto o hacer venta -->
             <div class="col-md-8">
-              <div v-if="mostrarInformacionFlag" class="card custom-card">
+              <!-- Mostrar productos para venta -->
+              <div v-if="modoVenta" class="card custom-card">
+                <div class="card-body">
+                  <h5 class="card-title">Venta de Productos</h5>
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Precio</th>
+                        <th scope="col">Cantidad</th>
+                        <th scope="col">Acción</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="producto in productos" :key="producto.id">
+                        <td>{{ producto.id }}</td>
+                        <td>{{ producto.nombre }}</td>
+                        <td>{{ producto.precio }}</td>
+                        <td>
+                          <input v-model.number="producto.cantidadVenta" type="number" min="1" class="form-control" />
+                        </td>
+                        <td>
+                          <button @click="agregarAlCarritoVenta(producto)" class="btn btn-primary">Añadir al Carrito</button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <button @click="finalizarVenta" class="btn btn-success w-100 mt-3">Finalizar Venta</button>
+                </div>
+              </div>
+
+              <!-- Mostrar información de productos o agregar nuevo producto -->
+              <div v-else-if="mostrarInformacionFlag" class="card custom-card">
                 <div class="card-body">
                   <h5 class="card-title">Productos</h5>
                   <table class="table table-striped">
@@ -89,10 +122,11 @@
                         </td>
                       </tr>
                     </tbody>
-
                   </table>
                 </div>
               </div>
+
+              <!-- Formulario para agregar nuevo producto -->
               <div v-else class="card custom-card">
                 <div class="card-body">
                   <h5 class="card-title">Agregar Producto</h5>

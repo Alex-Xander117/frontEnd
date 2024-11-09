@@ -77,6 +77,16 @@ export default {
         console.error('Error al actualizar el producto en ApiService:', error);
         throw error; // Lanza el error para que pueda ser manejado por el componente
       }
+    },
+    // Nueva función para registrar una venta
+    async registrarVenta(venta) {
+      try {
+        const response = await axios.post(`${API_URL}/ventas`, venta);
+        return response.data; // Retorna la información de la venta registrada
+      } catch (error) {
+        console.error('Error al registrar la venta:', error);
+        throw error; // Lanza el error para que pueda ser manejado por el componente
+      }
     }
   
 };

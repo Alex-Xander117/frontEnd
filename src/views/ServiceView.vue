@@ -14,7 +14,6 @@
             <li class="nav-item">
               <router-link to="/service" class="nav-link">Servicios</router-link>
             </li>
-
             <li class="nav-item">
               <router-link to="/team" class="nav-link">Equipo</router-link>
             </li>
@@ -53,13 +52,33 @@
                   <h5 class="card-title">Opciones de Producto</h5>
                   <button @click="agregarProducto" class="btn btn-primary mt-3 w-100 mb-3 btn-block">Agregar Producto</button>
                   <button @click="mostrarInformacion" class="btn btn-info mt-3 w-100 mb-3 btn-block">Mostrar Información</button>
+                  <button @click="registrarVenta" class="btn btn-info mt-3 w-100 mb-3 btn-block">Registrar venta</button>
                 </div>
               </div>
             </div>
 
             <!-- Segundo cuadro para mostrar la información o formulario -->
             <div class="col-md-8">
-              <div v-if="mostrarInformacionFlag" class="card custom-card">
+              <!-- Formulario para registrar la venta -->
+              <div v-if="registrarVentaFlag" class="card custom-card">
+                <div class="card-body">
+                  <h5 class="card-title">Registrar Venta</h5>
+                  <div class="form-group">
+                    <label for="productoSeleccionado">Seleccione un producto:</label>
+                    <select v-model="venta.productoId" id="productoSeleccionado" class="form-control mb-3">
+                      <option disabled value="">Seleccione un producto</option>
+                      <option v-for="producto in productos" :key="producto.id" :value="producto.id">{{ producto.nombre }}</option>
+                    </select>
+                    
+                    <label for="cantidadVendida">Cantidad vendida:</label>
+                    <input v-model="venta.cantidad" type="number" min="1" id="cantidadVendida" placeholder="Cantidad vendida" class="form-control mb-3" />
+                  </div>
+                  <button @click="guardarVenta" class="btn btn-success w-100">Registrar Venta</button>
+                </div>
+              </div>
+
+              <!-- Vista para mostrar productos o formulario de agregar producto -->
+              <div v-else-if="mostrarInformacionFlag" class="card custom-card">
                 <div class="card-body">
                   <h5 class="card-title">Productos</h5>
                   <table class="table table-striped">
@@ -84,15 +103,16 @@
                         <td><input v-model="producto.precio" placeholder="Precio" class="form-control" /></td>
                         <td><input v-model="producto.cantidad_stock" placeholder="Stock" class="form-control" /></td>
                         <td>
-                          <button @click="actualizarProducto(producto.id, producto)" class="btn btn-success btn-block">Actualizar</button>
-                          <button @click="eliminarProducto(producto.id)" class="btn btn-danger btn-block">Eliminar</button>
+                          <button @click="actualizarProducto(producto.id, producto)" class="btn btn-success btn-action">Actualizar</button>
+                          <button @click="eliminarProducto(producto.id)" class="btn btn-danger btn-action">Eliminar</button>
                         </td>
                       </tr>
                     </tbody>
-
                   </table>
                 </div>
               </div>
+
+              <!-- Formulario de agregar producto -->
               <div v-else class="card custom-card">
                 <div class="card-body">
                   <h5 class="card-title">Agregar Producto</h5>
@@ -121,13 +141,18 @@ import ApiService from '@/services/ApiService';
 const isNavbarOpen = ref(false);
 const router = useRouter();
 const nombre = ref('');
-const productos =  ref([]);
-const mostrarInformacionFlag = ref(true); // Bandera para saber si mostrar productos o formulario
+const productos = ref([]);
+const mostrarInformacionFlag = ref(true);
+const registrarVentaFlag = ref(false);
 const nuevoProducto = ref({
   nombre: '',
   descripcion: '',
   precio: '',
   cantidad_stock: ''
+});
+const venta = ref({
+  productoId: '',
+  cantidad: 1
 });
 
 onMounted(async () => {
@@ -148,60 +173,80 @@ const handleLogout = () => {
 };
 
 // Funciones CRUD
-
 const obtenerProductos = async () => {
   try {
     const response = await ApiService.obtenerProductos();
-    console.log(response); // Verifica la respuesta aquí
-    productos.value = response || []; // Asegúrate de manejar el caso de undefined
+    productos.value = response || [];
   } catch (error) {
     console.error('Error fetching data:', error);
   }
 };
 
-const agregarProducto = async () => {
-  mostrarInformacionFlag.value = false; // Cambia a formulario de agregar producto
+const agregarProducto = () => {
+  mostrarInformacionFlag.value = false;
+  registrarVentaFlag.value = false;
 };
 
 const mostrarInformacion = () => {
-  mostrarInformacionFlag.value = true; // Muestra la tabla de productos
+  mostrarInformacionFlag.value = true;
+  registrarVentaFlag.value = false;
+};
+
+const registrarVenta = () => {
+  registrarVentaFlag.value = true;
+  mostrarInformacionFlag.value = false;
+};
+
+const guardarVenta = async () => {
+  if (venta.value.productoId && venta.value.cantidad > 0) {
+    try {
+      await ApiService.registrarVenta(venta.value);
+      alert('Venta registrada con éxito');
+      registrarVentaFlag.value = false;
+      mostrarInformacionFlag.value = true;
+      venta.value = { productoId: '', cantidad: 1 };
+    } catch (error) {
+      console.error('Error al registrar la venta:', error);
+    }
+  } else {
+    alert('Seleccione un producto y una cantidad válida');
+  }
 };
 
 const guardarNuevoProducto = async () => {
-  try {
-    const response = await ApiService.agregarProducto(nuevoProducto.value);
-    productos.value.push(response);
-    nuevoProducto.value = { nombre: '', descripcion: '', precio: '', cantidad_stock: '' }; // Limpiar el formulario
-    mostrarInformacionFlag.value = true; // Regresar a la vista de productos
-  } catch (error) {
-    console.error('Error al agregar producto:', error);
+  if (nuevoProducto.value.nombre && nuevoProducto.value.precio) {
+    try {
+      await ApiService.guardarProducto(nuevoProducto.value);
+      await obtenerProductos();
+      alert('Producto guardado con éxito');
+      nuevoProducto.value = { nombre: '', descripcion: '', precio: '', cantidad_stock: '' };
+      mostrarInformacionFlag.value = true;
+    } catch (error) {
+      console.error('Error al guardar el producto:', error);
+    }
+  } else {
+    alert('Nombre y precio son requeridos');
   }
 };
-
 
 const actualizarProducto = async (id, producto) => {
-  console.log("Producto a actualizar:", producto); // Verifica el objeto completo
-  console.log("ID del producto:", id); // Verifica que el ID es el correcto
-  producto.precio = parseFloat(producto.precio)
-  producto.cantidad_stock = parseFloat(producto.cantidad_stock)
   try {
-    const response = await ApiService.actualizarProducto(id, producto);
-    console.log(response)
+    await ApiService.actualizarProducto(id, producto);
+    alert('Producto actualizado con éxito');
   } catch (error) {
-    console.error('Error al agregar producto:', error);
+    console.error('Error al actualizar el producto:', error);
   }
-
 };
 
-
-
-
 const eliminarProducto = async (id) => {
-  try {
-    await ApiService.eliminarProducto(id);
-    productos.value = productos.value.filter(p => p.id !== id);
-  } catch (error) {
-    console.error('Error al eliminar producto:', error);
+  if (confirm('¿Está seguro de eliminar este producto?')) {
+    try {
+      await ApiService.eliminarProducto(id);
+      await obtenerProductos();
+      alert('Producto eliminado con éxito');
+    } catch (error) {
+      console.error('Error al eliminar el producto:', error);
+    }
   }
 };
 </script>
@@ -256,21 +301,19 @@ const eliminarProducto = async (id) => {
   max-width: 1000px; /* Define un ancho máximo para evitar que el cuadro sea demasiado grande */
 }
 
+/* Botones de acción en las filas de productos */
+.btn-action {
+  width: 100px; /* Ajusta este valor según el tamaño deseado */
+  margin: 0 5px; /* Opcional: Espacio entre botones */
+}
+
 /* Input fields */
 .form-control {
   background-color: hsl(0, 0%, 96%);
   border: 1px solid #ddd;
-  
 }
 
 .form-control:focus {
   border-color: #65c7c2;
 }
-
-
-
-
 </style>
-
-
-

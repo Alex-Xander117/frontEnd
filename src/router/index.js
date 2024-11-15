@@ -5,6 +5,7 @@ import HomeView from '../views/HomeView.vue';
 import TermsAndConditions from '../views/TermsAndConditions.vue';
 import SeriviceView from '../views/ServiceView.vue';
 import TeamView from '@/views/TeamView.vue';
+import VentaView from '@/views/VentaView.vue';
 
 //hola que hace
 const routes = [
@@ -41,6 +42,11 @@ const routes = [
     path: '/team',
     name: 'Team',
     component: TeamView,
+  },
+  {
+    path: '/venta',
+    name: 'Venta',
+    component: VentaView,
   },
 ];
 

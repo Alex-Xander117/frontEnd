@@ -58,53 +58,39 @@
         <!-- Contenedor Principal -->
         <div class="container main-content mt-5">
           <div class="row">
-            <!-- Cuadro de Opciones de Producto -->
+            <!-- Primer cuadro con botones -->
             <div class="col-md-4">
               <div class="card custom-card">
                 <div class="card-body">
                   <h5 class="card-title">Opciones de Producto</h5>
                   <button @click="agregarProducto" class="btn btn-primary mt-3 w-100 mb-3 btn-block">Agregar Producto</button>
                   <button @click="mostrarInformacion" class="btn btn-info mt-3 w-100 mb-3 btn-block">Mostrar Información</button>
-                  <button @click="mostrarVentas" class="btn btn-success mt-3 w-100 mb-3 btn-block">Ventas</button>
+                  <button @click="registrarVenta" class="btn btn-info mt-3 w-100 mb-3 btn-block">Registrar venta</button>
                 </div>
               </div>
             </div>
 
-            <!-- Segundo cuadro para mostrar información, agregar producto o hacer venta -->
+            <!-- Segundo cuadro para mostrar la información o formulario -->
             <div class="col-md-8">
-              <!-- Mostrar productos para venta -->
-              <div v-if="modoVenta" class="card custom-card">
+              <!-- Formulario para registrar la venta -->
+              <div v-if="registrarVentaFlag" class="card custom-card">
                 <div class="card-body">
-                  <h5 class="card-title">Venta de Productos</h5>
-                  <table class="table table-striped">
-                    <thead>
-                      <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">Nombre</th>
-                        <th scope="col">Precio</th>
-                        <th scope="col">Cantidad</th>
-                        <th scope="col">Acción</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="producto in productos" :key="producto.id">
-                        <td>{{ producto.id }}</td>
-                        <td>{{ producto.nombre }}</td>
-                        <td>{{ producto.precio }}</td>
-                        <td>
-                          <input v-model.number="producto.cantidadVenta" type="number" min="1" class="form-control" />
-                        </td>
-                        <td>
-                          <button @click="agregarAlCarritoVenta(producto)" class="btn btn-primary">Añadir al Carrito</button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <button @click="finalizarVenta" class="btn btn-success w-100 mt-3">Finalizar Venta</button>
+                  <h5 class="card-title">Registrar Venta</h5>
+                  <div class="form-group">
+                    <label for="productoSeleccionado">Seleccione un producto:</label>
+                    <select v-model="venta.productoId" id="productoSeleccionado" class="form-control mb-3">
+                      <option disabled value="">Seleccione un producto</option>
+                      <option v-for="producto in productos" :key="producto.id" :value="producto.id">{{ producto.nombre }}</option>
+                    </select>
+                    
+                    <label for="cantidadVendida">Cantidad vendida:</label>
+                    <input v-model="venta.cantidad" type="number" min="1" id="cantidadVendida" placeholder="Cantidad vendida" class="form-control mb-3" />
+                  </div>
+                  <button @click="guardarVenta" class="btn btn-success w-100">Registrar Venta</button>
                 </div>
               </div>
 
-              <!-- Mostrar información de productos o agregar nuevo producto -->
+              <!-- Vista para mostrar productos o formulario de agregar producto -->
               <div v-else-if="mostrarInformacionFlag" class="card custom-card">
                 <div class="card-body">
                   <h5 class="card-title">Productos</h5>
@@ -130,8 +116,8 @@
                         <td><input v-model="producto.precio" placeholder="Precio" class="form-control" /></td>
                         <td><input v-model="producto.cantidad_stock" placeholder="Stock" class="form-control" /></td>
                         <td>
-                          <button @click="actualizarProducto(producto.id, producto)" class="btn btn-success btn-block">Actualizar</button>
-                          <button @click="eliminarProducto(producto.id)" class="btn btn-danger btn-block">Eliminar</button>
+                          <button @click="actualizarProducto(producto.id, producto)" class="btn btn-success btn-action">Actualizar</button>
+                          <button @click="eliminarProducto(producto.id)" class="btn btn-danger btn-action">Eliminar</button>
                         </td>
                       </tr>
                     </tbody>
@@ -139,7 +125,7 @@
                 </div>
               </div>
 
-              <!-- Formulario para agregar nuevo producto -->
+              <!-- Formulario de agregar producto -->
               <div v-else class="card custom-card">
                 <div class="card-body">
                   <h5 class="card-title">Agregar Producto</h5>
@@ -211,15 +197,17 @@ import ApiService from '@/services/ApiService';
 const isNavbarOpen = ref(false);
 const router = useRouter();
 const nombre = ref('');
-const productos = ref([]);
-const mostrarInformacionFlag = ref(true);
-const modoVenta = ref(false);
-const carrito = ref([]);
+const productos =  ref([]);
+const mostrarInformacionFlag = ref(true); // Bandera para saber si mostrar productos o formulario
 const nuevoProducto = ref({
   nombre: '',
   descripcion: '',
   precio: '',
   cantidad_stock: ''
+});
+const venta = ref({
+  productoId: '',
+  cantidad: 1
 });
 
 onMounted(async () => {
@@ -239,6 +227,8 @@ const handleLogout = () => {
   }
 };
 
+// Funciones CRUD
+
 const obtenerProductos = async () => {
   try {
     const response = await ApiService.obtenerProductos();
@@ -248,83 +238,43 @@ const obtenerProductos = async () => {
   }
 };
 
-const agregarProducto = () => {
-  mostrarInformacionFlag.value = false;
-  modoVenta.value = false;
+const agregarProducto = async () => {
+  mostrarInformacionFlag.value = false; // Cambia a formulario de agregar producto
 };
 
 const mostrarInformacion = () => {
-  mostrarInformacionFlag.value = true;
-  modoVenta.value = false;
-};
-
-const mostrarVentas = () => {
-  modoVenta.value = true;
-  mostrarInformacionFlag.value = false;
+  mostrarInformacionFlag.value = true; // Muestra la tabla de productos
 };
 
 const guardarNuevoProducto = async () => {
   try {
     const response = await ApiService.agregarProducto(nuevoProducto.value);
-    if (response) {
-      productos.value.push(response);
-      nuevoProducto.value = {
-        nombre: '',
-        descripcion: '',
-        precio: '',
-        cantidad_stock: ''
-      };
-    }
+    productos.value.push(response);
+    nuevoProducto.value = { nombre: '', descripcion: '', precio: '', cantidad_stock: '' }; // Limpiar el formulario
+    mostrarInformacionFlag.value = true; // Regresar a la vista de productos
   } catch (error) {
-    console.error(error);
+    console.error('Error al agregar producto:', error);
   }
 };
 
-const mostrarCarrito = () => {
-  const modal = new bootstrap.Modal(document.getElementById('carritoModal'));
-  modal.show();
-};
 
 const actualizarProducto = async (id, producto) => {
   try {
-    await ApiService.actualizarProducto(id, producto);
-    alert('Producto actualizado');
+    const response = await ApiService.actualizarProducto(id, producto);
+    console.log(response)
   } catch (error) {
-    console.error(error);
+    console.error('Error al agregar producto:', error);
   }
 };
 
 const eliminarProducto = async (id) => {
   try {
     await ApiService.eliminarProducto(id);
-    productos.value = productos.value.filter((producto) => producto.id !== id);
+    productos.value = productos.value.filter(p => p.id !== id);
   } catch (error) {
-    console.error(error);
+    console.error('Error al eliminar producto:', error);
   }
 };
-
-const agregarAlCarritoVenta = (producto) => {
-  if (producto.cantidadVenta > 0) {
-    const productoEnCarrito = carrito.value.find(item => item.id === producto.id);
-    if (productoEnCarrito) {
-      productoEnCarrito.cantidad += producto.cantidadVenta;
-    } else {
-      carrito.value.push({ ...producto, cantidad: producto.cantidadVenta });
-    }
-  } else {
-    alert('Debes ingresar una cantidad válida');
-  }
-};
-
-const finalizarVenta = () => {
-  if (carrito.value.length > 0) {
-    alert('Venta finalizada');
-    carrito.value = [];
-  } else {
-    alert('No hay productos en el carrito');
-  }
-};
-
 </script>
 
 <style scoped>
@@ -333,14 +283,25 @@ const finalizarVenta = () => {
 }
 
 .custom-card {
-  border-radius: 15px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 100%; /* Permite que el card ocupe el 100% del ancho disponible */
+  max-width: 1000px; /* Define un ancho máximo para evitar que el cuadro sea demasiado grande */
 }
 
-.mask-custom {
-  background: rgba(33, 37, 41, 0.75);
+/* Input fields */
+.form-control {
+  background-color: hsl(0, 0%, 96%);
+  border: 1px solid #ddd;
+  
 }
 
 .btn-block {
   width: 100%;
 }
 </style>
+
+
+

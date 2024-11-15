@@ -188,11 +188,12 @@
 <script setup>
 
 import 'bootstrap/dist/css/bootstrap.min.css'; // Importa los estilos de Bootstrap
-import * as bootstrap from 'bootstrap'; // Importa las funcionalidades de JavaScript de Bootstrap
+
 
 import { ref, onMounted } from 'vue'; 
 import { useRouter } from 'vue-router';
 import ApiService from '@/services/ApiService';
+
 
 const isNavbarOpen = ref(false);
 const router = useRouter();

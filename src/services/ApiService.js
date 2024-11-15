@@ -19,10 +19,10 @@ export default {
   },
 
   async login(credentials) {
-    try{
+    try {
       const response = await axios.post(`${API_URL}/api/user/loginUser`, credentials);
       return response.data;
-    } catch(error){
+    } catch (error) {
       console.error('Error login', error.response || error.message)
     }
   },
@@ -77,6 +77,16 @@ export default {
         console.error('Error al actualizar el producto en ApiService:', error);
         throw error; // Lanza el error para que pueda ser manejado por el componente
       }
+    },
+    async obtenerCarrito() {
+      try {
+        const response = await axios.get(`${API_URL}/api/carrito`);
+        return response.data;  // Devuelve el carrito
+      } catch (error) {
+        console.error('Error al obtener el carrito:', error.response || error.message);
+        throw error;  // Lanza el error para que pueda ser manejado en el componente
+      }
     }
+
   
 };

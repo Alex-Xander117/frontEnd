@@ -44,28 +44,21 @@ const columns = 12;  // Número de columnas de la cuadrícula
 // Función para manejar el inicio de sesión
 const handleLogin = async () => {
   try {
-    // Llamar a loginUser con las credenciales
-    const response = await ApiService.login({email: email.value, password: password.value });
-    
+    const response = await ApiService.login({ email: email.value, password: password.value });
     if (response) {
-      // Si la respuesta contiene el token, guardarlo
-      localStorage.setItem('email', email.value);//creo que el problema es de aca se tiene que setear desde aca
+      localStorage.setItem('email', email.value);
       localStorage.setItem('nombre', response.nombre);
-      
-
-      console.log(response); // Verifica si el campo "nombre" está presente
-
-
       router.push('/home');
-
     } else {
       console.error('Error al iniciar sesión');
     }
   } catch (error) {
-    console.error('Error durante el inicio de sesión:', error.message);
-    alert(error.message); // Muestra un mensaje al usuario
+    console.error('Error durante el inicio de sesión:', error.response ? error.response.data : error.message);
+    alert(error.response ? error.response.data.error : 'Error durante el inicio de sesión');
   }
 };
+
+
 
 const hoverSquare = (event) => {
   event.target.style.backgroundColor = '#65c7c2'; // Cambia el color al pasar el cursor

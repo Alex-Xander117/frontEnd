@@ -1,5 +1,9 @@
 <template>
   <header>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+
+
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top mask-custom shadow-0">
       <div class="container">
@@ -18,7 +22,16 @@
               <router-link to="/team" class="nav-link">Equipo</router-link>
             </li>
           </ul>
-          
+
+          <li class="nav-item">
+            <button @click="mostrarCarrito" class="nav-link position-relative btn btn-link">
+              <i class="fas fa-shopping-cart"></i>
+              <span v-if="carrito.length > 0" class="badge bg-danger position-absolute top-0 start-100 translate-middle">
+                {{ carrito.length }}
+              </span>
+            </button>
+          </li>
+
           <ul class="navbar-nav d-flex flex-row">
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -144,10 +157,53 @@
         </div>
       </div>
     </section>
+
+    <!-- Modal del Carrito -->
+    <div class="modal fade" id="carritoModal" tabindex="-1" aria-labelledby="carritoModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="carritoModalLabel">Carrito de Compras</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Cantidad</th>
+                  <th>Precio</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="item in carrito" :key="item.id">
+                  <td>{{ item.id }}</td>
+                  <td>{{ item.nombre }}</td>
+                  <td>{{ item.cantidad }}</td>
+                  <td>{{ item.precio }}</td>
+                  <td>{{ item.cantidad * item.precio }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn btn-primary" @click="finalizarVenta">Finalizar Venta</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </header>
 </template>
 
 <script setup>
+
+import 'bootstrap/dist/css/bootstrap.min.css'; // Importa los estilos de Bootstrap
+import * as bootstrap from 'bootstrap'; // Importa las funcionalidades de JavaScript de Bootstrap
+
 import { ref, onMounted } from 'vue'; 
 import { useRouter } from 'vue-router';
 import ApiService from '@/services/ApiService';
@@ -155,8 +211,10 @@ import ApiService from '@/services/ApiService';
 const isNavbarOpen = ref(false);
 const router = useRouter();
 const nombre = ref('');
-const productos =  ref([]);
-const mostrarInformacionFlag = ref(true); // Bandera para saber si mostrar productos o formulario
+const productos = ref([]);
+const mostrarInformacionFlag = ref(true);
+const modoVenta = ref(false);
+const carrito = ref([]);
 const nuevoProducto = ref({
   nombre: '',
   descripcion: '',
@@ -181,130 +239,108 @@ const handleLogout = () => {
   }
 };
 
-// Funciones CRUD
-
 const obtenerProductos = async () => {
   try {
     const response = await ApiService.obtenerProductos();
-    console.log(response); // Verifica la respuesta aquí
-    productos.value = response || []; // Asegúrate de manejar el caso de undefined
+    productos.value = response || [];
   } catch (error) {
     console.error('Error fetching data:', error);
   }
 };
 
-const agregarProducto = async () => {
-  mostrarInformacionFlag.value = false; // Cambia a formulario de agregar producto
+const agregarProducto = () => {
+  mostrarInformacionFlag.value = false;
+  modoVenta.value = false;
 };
 
 const mostrarInformacion = () => {
-  mostrarInformacionFlag.value = true; // Muestra la tabla de productos
+  mostrarInformacionFlag.value = true;
+  modoVenta.value = false;
+};
+
+const mostrarVentas = () => {
+  modoVenta.value = true;
+  mostrarInformacionFlag.value = false;
 };
 
 const guardarNuevoProducto = async () => {
   try {
     const response = await ApiService.agregarProducto(nuevoProducto.value);
-    productos.value.push(response);
-    nuevoProducto.value = { nombre: '', descripcion: '', precio: '', cantidad_stock: '' }; // Limpiar el formulario
-    mostrarInformacionFlag.value = true; // Regresar a la vista de productos
+    if (response) {
+      productos.value.push(response);
+      nuevoProducto.value = {
+        nombre: '',
+        descripcion: '',
+        precio: '',
+        cantidad_stock: ''
+      };
+    }
   } catch (error) {
-    console.error('Error al agregar producto:', error);
+    console.error(error);
   }
 };
 
+const mostrarCarrito = () => {
+  const modal = new bootstrap.Modal(document.getElementById('carritoModal'));
+  modal.show();
+};
 
 const actualizarProducto = async (id, producto) => {
-  console.log("Producto a actualizar:", producto); // Verifica el objeto completo
-  console.log("ID del producto:", id); // Verifica que el ID es el correcto
-  producto.precio = parseFloat(producto.precio)
-  producto.cantidad_stock = parseFloat(producto.cantidad_stock)
   try {
-    const response = await ApiService.actualizarProducto(id, producto);
-    console.log(response)
+    await ApiService.actualizarProducto(id, producto);
+    alert('Producto actualizado');
   } catch (error) {
-    console.error('Error al agregar producto:', error);
+    console.error(error);
   }
-
 };
-
-
-
 
 const eliminarProducto = async (id) => {
   try {
     await ApiService.eliminarProducto(id);
-    productos.value = productos.value.filter(p => p.id !== id);
+    productos.value = productos.value.filter((producto) => producto.id !== id);
   } catch (error) {
-    console.error('Error al eliminar producto:', error);
+    console.error(error);
   }
 };
+
+const agregarAlCarritoVenta = (producto) => {
+  if (producto.cantidadVenta > 0) {
+    const productoEnCarrito = carrito.value.find(item => item.id === producto.id);
+    if (productoEnCarrito) {
+      productoEnCarrito.cantidad += producto.cantidadVenta;
+    } else {
+      carrito.value.push({ ...producto, cantidad: producto.cantidadVenta });
+    }
+  } else {
+    alert('Debes ingresar una cantidad válida');
+  }
+};
+
+const finalizarVenta = () => {
+  if (carrito.value.length > 0) {
+    alert('Venta finalizada');
+    carrito.value = [];
+  } else {
+    alert('No hay productos en el carrito');
+  }
+};
+
 </script>
 
 <style scoped>
-.navbar .nav-link {
-  color: #fff !important; 
-  transition: color 0.3s ease; 
+.main-content {
+  margin-top: 5%;
 }
 
-.navbar .nav-link:hover {
-  color: #65c7c2 !important; 
+.custom-card {
+  border-radius: 15px;
 }
 
 .mask-custom {
-  backdrop-filter: blur(5px);
-  background-color: rgba(255, 255, 255, 0.062);
+  background: rgba(33, 37, 41, 0.75);
 }
 
-.navbar-brand {
-  font-size: 1.75rem;
-  letter-spacing: 3px;
+.btn-block {
+  width: 100%;
 }
-
-.bg-image {
-  background-size: cover;
-  background-position: center;
-  position: relative;
-  z-index: 1;
-  height: 100vh; /* Asegura que ocupe toda la altura de la ventana */
-  overflow: hidden; /* Evita el espacio blanco */
-  box-shadow: inset 0 0 100px 50px rgba(0, 0, 0, 0.7);
-}
-
-/* Main content container */
-.main-content {
-  display: flex;
-  justify-content: center; /* Centrado horizontal */
-  align-items: center; /* Centrado vertical */
-  min-height: 100vh;
-  height: 100%; /* Asegura que ocupe toda la altura disponible */
-  padding-top: 40px;
-}
-
-/* Card styling */
-.custom-card {
-  background-color: rgba(255, 255, 255, 0.8);
-  border-radius: 10px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  width: 100%; /* Permite que el card ocupe el 100% del ancho disponible */
-  max-width: 1000px; /* Define un ancho máximo para evitar que el cuadro sea demasiado grande */
-}
-
-/* Input fields */
-.form-control {
-  background-color: hsl(0, 0%, 96%);
-  border: 1px solid #ddd;
-  
-}
-
-.form-control:focus {
-  border-color: #65c7c2;
-}
-
-
-
-
 </style>
-
-
-

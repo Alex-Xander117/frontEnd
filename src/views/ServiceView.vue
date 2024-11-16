@@ -1,8 +1,6 @@
 <template>
   <header>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    
-
 
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top mask-custom shadow-0">
@@ -73,22 +71,46 @@
             <!-- Segundo cuadro para mostrar la información o formulario -->
             <div class="col-md-8">
               <!-- Formulario para registrar la venta -->
+               
+              <!-- Formulario para registrar la venta -->
               <div v-if="registrarVentaFlag" class="card custom-card">
                 <div class="card-body">
                   <h5 class="card-title">Registrar Venta</h5>
-                  <div class="form-group">
-                    <label for="productoSeleccionado">Seleccione un producto:</label>
-                    <select v-model="venta.productoId" id="productoSeleccionado" class="form-control mb-3">
-                      <option disabled value="">Seleccione un producto</option>
-                      <option v-for="producto in productos" :key="producto.id" :value="producto.id">{{ producto.nombre }}</option>
-                    </select>
-                    
-                    <label for="cantidadVendida">Cantidad vendida:</label>
-                    <input v-model="venta.cantidad" type="number" min="1" id="cantidadVendida" placeholder="Cantidad vendida" class="form-control mb-3" />
-                  </div>
-                  <button @click="guardarVenta" class="btn btn-success w-100">Registrar Venta</button>
+
+                  <!-- Mostrar tabla de productos para agregar al carrito -->
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Categoría</th>
+                        <th scope="col">Precio</th>
+                        <th scope="col">Cantidad disponible</th>
+                        <th scope="col">Cantidad vendida</th>
+                        <th scope="col">Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="producto in productos" :key="producto.id">
+                        <td>{{ producto.id }}</td>
+                        <td>{{ producto.nombre }}</td>
+                        <td>{{ producto.descripcion }}</td>
+                        <td>{{ producto.precio }}</td>
+                        <td>{{ producto.cantidad_stock }}</td>
+                        <td>
+                          <input v-model="producto.cantidadVendida" type="number" min="1" max="producto.cantidad_stock" class="form-control" />
+                        </td>
+                        <td>
+                          <button @click="agregarAlCarrito(producto)" class="btn btn-primary">Agregar al Carrito</button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <button type="button" class="btn btn-primary" @click="guardarVenta">Finalizar Compra</button>
+
                 </div>
               </div>
+
 
               <!-- Vista para mostrar productos o formulario de agregar producto -->
               <div v-else-if="mostrarInformacionFlag" class="card custom-card">
@@ -176,12 +198,11 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-            <button type="button" class="btn btn-primary" @click="finalizarVenta">Finalizar Venta</button>
+            <button type="button" class="btn btn-primary" @click="finalizarVenta">Finalizar Compra</button>
           </div>
         </div>
       </div>
     </div>
-
   </header>
 </template>
 
@@ -199,7 +220,9 @@ const isNavbarOpen = ref(false);
 const router = useRouter();
 const nombre = ref('');
 const productos =  ref([]);
+const carrito = ref([]);
 const mostrarInformacionFlag = ref(true); // Bandera para saber si mostrar productos o formulario
+const registrarVentaFlag = ref(false);
 const nuevoProducto = ref({
   nombre: '',
   descripcion: '',
@@ -213,7 +236,11 @@ const venta = ref({
 
 onMounted(async () => {
   nombre.value = localStorage.getItem('nombre');
-  await obtenerProductos();
+  try{
+    await obtenerProductos();
+  }catch(error){
+    console.error('Error al cargar producto', error);
+  }
 });
 
 const toggleNavbar = () => {
@@ -233,18 +260,32 @@ const handleLogout = () => {
 const obtenerProductos = async () => {
   try {
     const response = await ApiService.obtenerProductos();
-    productos.value = response || [];
+    // Verifica si la respuesta es un arreglo
+    if (Array.isArray(response)) {
+      productos.value = response;
+    } else {
+      productos.value = [];
+      console.warn('La respuesta no es un arreglo:', response);
+    }
   } catch (error) {
     console.error('Error fetching data:', error);
+    productos.value = []; // En caso de error, asegúrate de que sea un arreglo vacío
   }
 };
 
-const agregarProducto = async () => {
-  mostrarInformacionFlag.value = false; // Cambia a formulario de agregar producto
+const registrarVenta = () => {
+  registrarVentaFlag.value = true; // Muestra el formulario de registrar venta
+  mostrarInformacionFlag.value = false; // Oculta la tabla de productos
 };
 
 const mostrarInformacion = () => {
+  registrarVentaFlag.value = false; // Oculta el formulario de registrar venta
   mostrarInformacionFlag.value = true; // Muestra la tabla de productos
+};
+
+const agregarProducto = () => {
+  registrarVentaFlag.value = false; // Oculta el formulario de registrar venta
+  mostrarInformacionFlag.value = false; // Oculta la tabla de productos para mostrar el formulario de agregar
 };
 
 const guardarNuevoProducto = async () => {
@@ -259,14 +300,58 @@ const guardarNuevoProducto = async () => {
 };
 
 
-const actualizarProducto = async (id, producto) => {
+const agregarAlCarrito = (producto) => {
+  // Lógica para agregar un producto al carrito
+  carrito.value.push({
+    id: producto.id,
+    nombre: producto.nombre,
+    cantidad: producto.cantidadVendida,
+    precio: producto.precio
+  });
+};
+
+const guardarVenta = async () => {
   try {
-    const response = await ApiService.actualizarProducto(id, producto);
-    console.log(response)
+    // Llamar a la API para registrar la venta
+    await ApiService.registrarVenta(venta.value);
+    // Limpia el formulario
+    venta.value = { productoId: '', cantidad: 1 };
   } catch (error) {
-    console.error('Error al agregar producto:', error);
+    console.error('Error al guardar la venta:', error);
   }
 };
+
+const mostrarCarrito = () => {
+  const carritoModal = new window.bootstrap.Modal(document.getElementById('carritoModal'));
+  carritoModal.show();
+
+};
+
+
+const actualizarProducto = async (id, producto) => {
+  try {
+    // Convertir valores al tipo correcto
+    const productoActualizado = {
+      nombre: producto.nombre,
+      descripcion: producto.descripcion,
+      precio: parseFloat(producto.precio), // Convertir precio a número de punto flotante
+      cantidad_stock: parseInt(producto.cantidad_stock, 10), // Convertir cantidad_stock a entero
+    };
+
+    // Enviar solicitud al backend
+    const response = await ApiService.actualizarProducto(id, productoActualizado);
+    console.log("Producto actualizado:", response);
+
+    // Actualizar localmente en la lista de productos
+    const index = productos.value.findIndex((p) => p.id === id);
+    if (index !== -1) {
+      productos.value[index] = response; // Usa la respuesta del backend para actualizar localmente
+    }
+  } catch (error) {
+    console.error("Error al actualizar producto:", error.response?.data || error.message);
+  }
+};
+
 
 const eliminarProducto = async (id) => {
   try {
@@ -276,6 +361,11 @@ const eliminarProducto = async (id) => {
     console.error('Error al eliminar producto:', error);
   }
 };
+
+
+
+
+
 </script>
 
 <style scoped>

@@ -45,13 +45,14 @@ const columns = 12;  // Número de columnas de la cuadrícula
 const handleLogin = async () => {
   try {
     const response = await ApiService.login({ email: email.value, password: password.value });
-    if (response) {
+    if (response && response.data) {
       localStorage.setItem('email', email.value);
       localStorage.setItem('nombre', response.nombre);
       router.push('/home');
     } else {
       console.error('Error al iniciar sesión');
     }
+    
   } catch (error) {
     console.error('Error durante el inicio de sesión:', error.response ? error.response.data : error.message);
     alert(error.response ? error.response.data.error : 'Error durante el inicio de sesión');

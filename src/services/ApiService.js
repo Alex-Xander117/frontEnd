@@ -19,12 +19,13 @@ export default {
   },
 
   async login(credentials) {
-
     try {
       const response = await axios.post(`${API_URL}/api/user/loginUser`, credentials);
-      console.log(response);
+      console.log('Respuesta del servidor:', response);
+      return response; // Retorna la respuesta completa
     } catch (error) {
-      console.error('Error login', error.response || error.message)
+      console.error('Error durante el login:', error.response || error.message);
+      throw error; // Lanza el error para que pueda ser manejado por el bloque catch en `handleLogin`
     }
   },
   
@@ -45,7 +46,7 @@ export default {
   },
     async obtenerProductos() {
       try {
-        const response = await axios.get(`${API_URL}/productos`);
+        const response = await axios.get(`${API_URL}/api/producto/productos`);
         return response.data;  // Devuelve la lista de productos
       } catch (error) {
         console.error('Error al obtener productos', error.response || error.message);
@@ -53,7 +54,7 @@ export default {
     },
     async agregarProducto(producto) {
       try {
-        const response = await axios.post(`${API_URL}/Guardaproducto`, producto);
+        const response = await axios.post(`${API_URL}/api/producto/Guardaproducto`, producto);
         return response.data;  // Devuelve el producto recién agregado
       } catch (error) {
         console.error('Error al agregar producto', error.response || error.message);
@@ -61,18 +62,20 @@ export default {
     },
     async eliminarProducto(id) {
       try {
-        await axios.delete(`${API_URL}/productos/${id}`);
+        await axios.delete(`${API_URL}/api/producto/productos/${id}`);
         return true;  // Devuelve true si la eliminación fue exitosa
       } catch (error) {
         console.error('Error al eliminar producto', error.response || error.message);
       }
     },
-    async actualizarProducto(id, producto) { // Cambié el orden para que el ID venga primero
+    async actualizarProducto(id, producto) { 
       console.log("producto desde api", producto)
       console.log("id desdes el api", id)
+      
       try {
         // Realiza una solicitud PUT al servidor para actualizar un producto
-        const response = await axios.put(`${API_URL}/productos/${id}`, producto);
+        
+        const response = await axios.put(`${API_URL}/api/producto/productos/${id}`, producto);
         return response.data; // Retorna la respuesta del servidor si es exitosa
       } catch (error) {
         console.error('Error al actualizar el producto en ApiService:', error);

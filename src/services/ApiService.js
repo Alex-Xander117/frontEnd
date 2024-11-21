@@ -20,12 +20,12 @@ export default {
 
   async login(credentials) {
     try {
-      const response = await axios.post(`${API_URL}/api/user/loginUser`, credentials);
+      const response = await axios.post(`${API_URL}/api/user/loginUser`, credentials);  // Cambiar la URL a '/api/user/loginUser'
       console.log('Respuesta del servidor:', response);
-      return response; // Retorna la respuesta completa
+      return response; 
     } catch (error) {
       console.error('Error durante el login:', error.response || error.message);
-      throw error; // Lanza el error para que pueda ser manejado por el bloque catch en `handleLogin`
+      throw error;
     }
   },
   
@@ -102,6 +102,4 @@ export default {
         throw error; // Lanza el error para que pueda ser manejado por el componente
       }
     }
-
-  
 };

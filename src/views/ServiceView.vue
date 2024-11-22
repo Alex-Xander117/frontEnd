@@ -393,6 +393,3 @@ const eliminarProducto = async (id) => {
   width: 100%;
 }
 </style>
-
-
-

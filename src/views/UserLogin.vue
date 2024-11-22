@@ -48,7 +48,7 @@ const handleLogin = async () => {
     if (response && response.data) {
       localStorage.setItem('email', email.value);
       localStorage.setItem('nombre', response.nombre);
-      router.push('/home');
+      router.push('/service');
     } else {
       console.error('Error al iniciar sesión');
     }

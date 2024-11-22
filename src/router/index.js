@@ -3,12 +3,16 @@ import Login from '../views/UserLogin.vue';
 import Register from '../views/UserRegister.vue';
 import HomeView from '../views/HomeView.vue';
 import TermsAndConditions from '../views/TermsAndConditions.vue';
-import SeriviceView from '../views/ServiceView.vue';
+import ServiceView from '../views/ServiceView.vue';
 import TeamView from '@/views/TeamView.vue';
 import VentaView from '@/views/VentaView.vue';
 
-//hola que hace
 const routes = [
+  {
+    path: '/',
+    name: 'Home',
+    component: HomeView,
+  },
   {
     path: '/login',
     name: 'Login',
@@ -20,23 +24,15 @@ const routes = [
     component: Register,
   },
   {
-    path: '/home',
-    name: 'Home',
-    component: HomeView,
-  },
-  {
     path: '/terms',
     name: 'TermsAndConditions',
     component: TermsAndConditions,
   },
   {
-    path: '/',
-    redirect: '/login', 
-  },
-  {
     path: '/service',
     name: 'Service',
-    component: SeriviceView,
+    component: ServiceView,
+    meta: { requiresAuth: true, requiresAdmin: true },
   },
   {
     path: '/team',
@@ -47,12 +43,32 @@ const routes = [
     path: '/venta',
     name: 'Venta',
     component: VentaView,
-  },
+  }
 ];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
 });
+
+// Middleware para verificar autenticación y autorización
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = localStorage.getItem('token'); // Aquí verificamos si hay un token en localStorage
+
+  // Verifica si la ruta requiere autenticación
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!isAuthenticated) {
+      // Si no está autenticado, redirige al login
+      next({ name: 'Login' });
+    } else {
+      // Si está autenticado, redirige a la vista solicitada
+      next();
+    }
+  } else {
+    // Si la ruta no requiere autenticación, simplemente sigue adelante
+    next();
+  }
+});
+
 
 export default router;

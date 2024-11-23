@@ -1,196 +1,221 @@
 <template>
-  <header>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top mask-custom shadow-0">
-      <div class="container">
-        <router-link to="/home" class="navbar-brand">
-          <span style="color: #65c7c2;">Inventory</span><span style="color: #fff;">Logistics</span>
-        </router-link>
+  <div class="container">
+    <!-- Imagen de la puerta de garaje -->
+    <div class="garage-door" :style="{ transform: `translateY(-${scrollPosition}px)` }">
+      <img src="@/assets/imagenes/puertaGaraje3.png" alt="Puerta de Garaje" />
 
-        <button class="navbar-toggler" type="button" @click="toggleNavbar">
-          <i class="fas fa-bars"></i>
-        </button>
+      <!-- Texto que se mueve junto con la puerta -->
+      <div class="text-overlay" :style="{ transform: `translateY(-${scrollPosition}px)` }"></div>
+    </div>
 
-        <div class="collapse navbar-collapse" :class="{ show: isNavbarOpen }" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto">
-            <li class="nav-item">
-              <router-link to="/service" class="nav-link">Servicios</router-link>
-            </li>
-
-            <li class="nav-item">
-              <router-link to="/team" class="nav-link">Equipo</router-link>
-            </li>
-          </ul>
-
-          <ul class="navbar-nav d-flex flex-row">
-            <!-- Usuario dropdown -->
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="https://via.placeholder.com/40" class="rounded-circle" alt="User Icon">
-              </a>
-
-              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                <li class="dropdown-item">
-                  <strong>{{ nombre }}</strong> <!-- Muestra el nombre del usuario aquí -->
-                </li>
-
-                <li><router-link class="dropdown-item" to="/profile">Ver perfil</router-link></li>
-
-                <li><a class="dropdown-item" @click="handleLogout">Cerrar sesión</a></li>
-              </ul>
-            </li>
-          </ul>
+    <!-- Contenedor principal para los textos e imágenes -->
+    <div class="content-sections">
+      <!-- Contenedor de texto e imagen de fondo que aparece gradualmente -->
+      <div class="text-image-container" :style="{ opacity: backgroundOpacity }">
+        <div class="text-content">
+          <h2>Quiénes somos</h2>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum. Cras venenatis euismod malesuada. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi.</p>
+        </div>
+        <div class="background-image">
+          <img src="@/assets/imagenes/fondo1.jpg" alt="Fondo visible después del scroll" />
+          <div class="gradient-overlay"></div>
         </div>
       </div>
-    </nav>
-    <!-- Navbar -->
 
-    <!-- Section: Design Block -->
-    <section>
-      <!-- Intro -->
-      <div id="intro" class="bg-image vh-100" style="background-image: url('https://www.ecommercenews.pe/wp-content/uploads/2022/02/Almacenes-para-logistica-y-centros-de-distribucion-crecen-en-Peru.jpg');">
-        <div class="mask" style="background-color: rgba(250, 182, 162, 0.15);"></div>
-
-        <!-- Section: Cards -->
-        <div class="container position-absolute custom-position">
-          <div class="row">
-            <div class="col-md-6 mb-4">
-              <div class="card h-100 shadow-0 border">
-                <div class="card-body">
-                  <h5 class="card-title">Sobre Nosotros</h5>
-                  <p class="card-text">
-                    Somos un equipo especializado en brindar seguimiento de inventario desde el momento de su fabricación hasta los almacenes, y desde estas hasta el punto de venta.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-md-6 mb-4">
-              <div class="card h-100 shadow-0 border">
-                <div class="card-body">
-                  <h5 class="card-title">Servicios</h5>
-                  <p class="card-text">
-                    Ofrecemos control de la cantidad del producto a la venta, las mercancías acabadas son liberadas para tramitar los pedidos, los productos son enviados a los clientes.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+      <!-- Nuevo contenedor: Texto a la derecha, imagen a la izquierda -->
+      <div class="text-image-container" :style="{ opacity: backgroundOpacity }">
+        <div class="background-image">
+          <img src="@/assets/imagenes/fondo2.jpg" alt="Fondo visible después del scroll" />
+          <div class="gradient-overlay right-gradient"></div>
         </div>
-        <!-- Section: Cards -->
-
+        <div class="text-content">
+          <h2>Nuestra misión</h2>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum. Cras venenatis euismod malesuada. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.</p>
+        </div>
       </div>
-      <!-- Intro -->
-    </section>
-    <!-- Section: Design Block -->
-  </header>
+
+      <!-- Nuevo contenedor con dos textos -->
+      <div class="dual-text-container">
+        <div class="text-box">
+          <h2>Gestionamiento de inventario</h2>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vel nisi nec magna posuere fringilla.</p>
+          <RouterLink to="/login">
+            <button>Administrar</button>
+          </RouterLink>
+        </div>
+        <div class="text-box">
+          <h2>Tienda</h2>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vel nisi nec magna posuere fringilla.</p>
+          <button>Comprar</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
-<script setup>
-import { ref, onMounted } from 'vue'; // Importa onMounted para cargar el nombre al montar
-import { useRouter } from 'vue-router';
+<script>
+export default {
+  data() {
+    return {
+      scrollPosition: 0,
+      windowHeight: window.innerHeight,
+      backgroundOpacity: 0, // Inicialmente el contenedor de texto es invisible
+    };
+  },
+  methods: {
+    onScroll() {
+      this.scrollPosition = window.scrollY;
 
-const isNavbarOpen = ref(false);
-const router = useRouter();
-const nombre = ref(''); // Almacenar el nombre del usuario
+      if (this.scrollPosition > window.innerHeight) {
+        this.scrollPosition = window.innerHeight;
+      }
 
-// Función para cargar el nombre del usuario al montar el componente
-onMounted(() => {
-  nombre.value = localStorage.getItem('nombre');
-  console.log(localStorage.usuario)
-  console.log('Nombre de usuario cargado:', nombre.value); // Para depurar
-});
- 
-
-// Función para alternar la visibilidad del menú de navegación
-const toggleNavbar = () => {
-  isNavbarOpen.value = !isNavbarOpen.value;
-};
-
-// Función para cerrar sesión
-const handleLogout = () => {
-  if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
-    localStorage.removeItem('email'); // Eliminar el nombre del usuario
-    localStorage.removeItem('nombre');
-    router.push('/login'); // Redirigir al login
-  }
+      this.backgroundOpacity = Math.min(this.scrollPosition / window.innerHeight, 1);
+    },
+  },
+  mounted() {
+    window.addEventListener("scroll", this.onScroll);
+  },
+  beforeUnmount() {
+    window.removeEventListener("scroll", this.onScroll);
+  },
 };
 </script>
 
 <style scoped>
-.navbar .nav-link {
-  color: #fff !important; 
-  transition: color 0.3s ease; 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.navbar .nav-link:hover {
-  color: #65c7c2 !important; 
-}
-
-.mask-custom {
-  backdrop-filter: blur(5px);
-  background-color: rgba(255, 255, 255, 0.062);
-}
-
-.navbar-brand {
-  font-size: 1.75rem;
-  letter-spacing: 3px;
-}
-
-.bg-image {
-  background-size: cover;
-  background-position: center;
+.container {
   position: relative;
+  width: 100%;
+  height: auto; /* Altura dinámica para incluir todos los contenedores */
+}
+
+.garage-door {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
   z-index: 1;
-  height: 100vh; /* Asegura que ocupe toda la altura de la ventana */
-  overflow: hidden; /* Evita el espacio blanco */
-  box-shadow: inset 0 0 100px 50px rgba(0, 0, 0, 0.7);
+  overflow: hidden;
+  transition: transform 0.2s ease-out;
 }
 
-/* Tarjetas */
-.card {
-  background-color: rgba(255, 255, 255, 0.9);
-  border-radius: 0.75rem;
-}
-
-.card-body {
-  padding: 2rem;
-}
-
-.card-title {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #65c7c2;
-}
-
-.card-text {
-  font-size: 1.1rem; /* Aumentado para mejor visibilidad */
-  color: #333;
-}
-
-/* Posicionamiento de las tarjetas */
-.custom-position {
-  top: 50%; /* Centrado vertical */
-  left: 50%; /* Centrado horizontal */
-  transform: translate(-50%, -50%); /* Centrando completamente */
-}
-
-section .container {
-  margin-top: 0; /* Eliminamos el margen superior */
-}
-
-section.container {
-  margin-bottom: 2rem;
-}
-
-/* Estilo para el dropdown de usuario */
-img.rounded-circle {
-  width: 40px;
-  height: 40px;
+.garage-door img {
+  width: 100%;
   object-fit: cover;
 }
 
-.dropdown-menu {
-  text-align: center;
+.text-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  color: white;
+  font-family: "Bokor", sans-serif;
+  font-size: 3rem;
+  font-weight: bold;
+}
+
+h2 {
+  color: #ffde59;
+}
+
+.content-sections {
+  margin-top: 100vh;
+}
+
+.text-image-container {
+  width: 100%;
+  height: 50vh;
+  display: flex;
+  transition: opacity 0.2s ease-out;
+  box-sizing: border-box;
+  background-color: black;
+}
+
+.text-content {
+  width: 50%;
+  padding: 20px;
+  color: white;
+}
+
+.background-image {
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.background-image img {
+  width: 100%;
+  height: 50vh;
+  object-fit: cover;
+}
+
+.gradient-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to right, rgb(0, 0, 0), transparent);
+  pointer-events: none;
+}
+
+.gradient-overlay.right-gradient {
+  background: linear-gradient(to left, rgb(0, 0, 0), transparent);
+}
+
+/* Nuevo contenedor dual */
+.dual-text-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Centra verticalmente los elementos */
+  width: 100%;
+  background-color: black;
+  color: white;
+  padding: 20px 0; /* Elimina el padding lateral */
+  box-sizing: border-box;
+}
+
+.text-box {
+  width: 45%;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centra horizontalmente los elementos */
+  text-align: center; /* Centra el texto */
+}
+
+.text-box h2 {
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+}
+
+.text-box p {
+  margin-bottom: 15px;
+}
+
+.text-box button {
+  padding: 10px 20px;
+  background-color: white;
+  color: black;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.text-box button:hover {
+  background-color: #ffde59; /* Cambia el fondo a amarillo cuando el cursor pasa sobre el botón */
+  color: black; /* Mantiene el texto en color negro */
 }
 </style>

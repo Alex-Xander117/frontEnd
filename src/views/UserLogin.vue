@@ -50,10 +50,15 @@ const handleLogin = async () => {
       const { token, nombre } = response.data; // Asegúrate de que el servidor envíe estos campos
       localStorage.setItem('token', token);
       localStorage.setItem('email', email.value);
+
       localStorage.setItem('nombre', nombre);
       localStorage.setItem("session", JSON.stringify(response.data));
 
       router.push('/home');
+
+      localStorage.setItem('nombre', response.nombre);
+      router.push('/service');
+
     } else {
       console.error('Error al iniciar sesión');
     }

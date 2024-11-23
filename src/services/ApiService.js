@@ -153,13 +153,13 @@ export default {
   },
 
   // Registrar una venta
-  async registrarVenta(venta) {
+  async registrarVentaFinalizada(venta) {
     try {
       const response = await axios.post(`${API_URL}/ventas`, venta);
-      return response.data; // Retorna la información de la venta registrada
+      return response.data;
     } catch (error) {
       console.error('Error al registrar la venta:', error);
-      throw error; // Lanza el error para que pueda ser manejado por el componente
+      throw error;
     }
   }
 };

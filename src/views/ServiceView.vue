@@ -213,162 +213,155 @@
 </template>
 
 <script setup>
-
-import 'bootstrap/dist/css/bootstrap.min.css'; // Importa los estilos de Bootstrap
-
-
-import { ref, onMounted } from 'vue'; 
-import { useRouter } from 'vue-router';
-import ApiService from '@/services/ApiService';
-
-
-const isNavbarOpen = ref(false);
-const router = useRouter();
-const nombre = ref('');
-const productos =  ref([]);
-const carrito = ref([]);
-const mostrarInformacionFlag = ref(true); // Bandera para saber si mostrar productos o formulario
-const registrarVentaFlag = ref(false);
-const nuevoProducto = ref({
-  nombre: '',
-  descripcion: '',
-  precio: '',
-  cantidad_stock: ''
-});
-const venta = ref({
-  productoId: '',
-  cantidad: 1
-});
-
-onMounted(async () => {
-  nombre.value = localStorage.getItem('nombre');
-  try{
-    await obtenerProductos();
-  }catch(error){
-    console.error('Error al cargar producto', error);
-  }
-});
-
-const toggleNavbar = () => {
-  isNavbarOpen.value = !isNavbarOpen.value;
-};
-
-const handleLogout = () => {
-  if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
-    localStorage.removeItem('userName');
-    localStorage.removeItem('authToken');
-    router.push('/login');
-  }
-};
-
-// Funciones CRUD
-
-const obtenerProductos = async () => {
-  try {
-    const response = await ApiService.obtenerProductos();
-    // Verifica si la respuesta es un arreglo
-    if (Array.isArray(response)) {
-      productos.value = response;
-    } else {
-      productos.value = [];
-      console.warn('La respuesta no es un arreglo:', response);
-    }
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    productos.value = []; // En caso de error, asegúrate de que sea un arreglo vacío
-  }
-};
-
-const registrarVenta = () => {
-  registrarVentaFlag.value = true; // Muestra el formulario de registrar venta
-  mostrarInformacionFlag.value = false; // Oculta la tabla de productos
-};
-
-const mostrarInformacion = () => {
-  registrarVentaFlag.value = false; // Oculta el formulario de registrar venta
-  mostrarInformacionFlag.value = true; // Muestra la tabla de productos
-};
-
-const agregarProducto = () => {
-  registrarVentaFlag.value = false; // Oculta el formulario de registrar venta
-  mostrarInformacionFlag.value = false; // Oculta la tabla de productos para mostrar el formulario de agregar
-};
-
-const guardarNuevoProducto = async () => {
-  try {
-    const response = await ApiService.agregarProducto(nuevoProducto.value);
-    productos.value.push(response);
-    nuevoProducto.value = { nombre: '', descripcion: '', precio: '', cantidad_stock: '' }; // Limpiar el formulario
-    mostrarInformacionFlag.value = true; // Regresar a la vista de productos
-  } catch (error) {
-    console.error('Error al agregar producto:', error);
-  }
-};
-
-
-const agregarAlCarrito = (producto) => {
-  // Lógica para agregar un producto al carrito
-  carrito.value.push({
-    id: producto.id,
-    nombre: producto.nombre,
-    cantidad: producto.cantidadVendida,
-    precio: producto.precio
+  
+  import 'bootstrap/dist/css/bootstrap.min.css'; // Importa los estilos de Bootstrap
+  
+  import { ref, onMounted } from 'vue'; 
+  import { useRouter } from 'vue-router';
+  import ApiService from '@/services/ApiService';
+  
+  const router = useRouter();
+  const nombre = ref('');
+  const productos =  ref([]);
+  const carrito = ref([]);
+  const mostrarInformacionFlag = ref(true); // Bandera para saber si mostrar productos o formulario
+  const registrarVentaFlag = ref(false);
+  const nuevoProducto = ref({
+    nombre: '',
+    descripcion: '',
+    precio: '',
+    cantidad_stock: ''
   });
-};
-
-const guardarVenta = async () => {
-  try {
-    // Llamar a la API para registrar la venta
-    await ApiService.registrarVenta(venta.value);
-    // Limpia el formulario
-    venta.value = { productoId: '', cantidad: 1 };
-  } catch (error) {
-    console.error('Error al guardar la venta:', error);
-  }
-};
-
-const mostrarCarrito = () => {
-  const carritoModal = new window.bootstrap.Modal(document.getElementById('carritoModal'));
-  carritoModal.show();
-
-};
-
-
-const actualizarProducto = async (id, producto) => {
-  try {
-    // Convertir valores al tipo correcto
-    const productoActualizado = {
-      nombre: producto.nombre,
-      descripcion: producto.descripcion,
-      precio: parseFloat(producto.precio), // Convertir precio a número de punto flotante
-      cantidad_stock: parseInt(producto.cantidad_stock, 10), // Convertir cantidad_stock a entero
-    };
-
-    // Enviar solicitud al backend
-    const response = await ApiService.actualizarProducto(id, productoActualizado);
-    console.log("Producto actualizado:", response);
-
-    // Actualizar localmente en la lista de productos
-    const index = productos.value.findIndex((p) => p.id === id);
-    if (index !== -1) {
-      productos.value[index] = response; // Usa la respuesta del backend para actualizar localmente
+  const venta = ref({
+    productoId: '',
+    cantidad: 1
+  });
+  
+  onMounted(async () => {
+    nombre.value = localStorage.getItem('nombre');
+    try{
+      await obtenerProductos();
+    }catch(error){
+      console.error('Error al cargar producto', error);
     }
-  } catch (error) {
-    console.error("Error al actualizar producto:", error.response?.data || error.message);
-  }
-};
-
-
-const eliminarProducto = async (id) => {
-  try {
-    await ApiService.eliminarProducto(id);
-    productos.value = productos.value.filter(p => p.id !== id);
-  } catch (error) {
-    console.error('Error al eliminar producto:', error);
-  }
-};
-
-
+  });
+    
+  const handleLogout = () => {
+    if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
+      localStorage.removeItem('userName');
+      localStorage.removeItem('authToken');
+      router.push('/login');
+    }
+  };
+  
+  // Funciones CRUD
+  
+  const obtenerProductos = async () => {
+    try {
+      const response = await ApiService.obtenerProductos();
+      // Verifica si la respuesta es un arreglo
+      if (Array.isArray(response)) {
+        productos.value = response;
+      } else {
+        productos.value = [];
+        console.warn('La respuesta no es un arreglo:', response);
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      productos.value = []; // En caso de error, asegúrate de que sea un arreglo vacío
+    }
+  };
+  
+  const registrarVenta = () => {
+    registrarVentaFlag.value = true; // Muestra el formulario de registrar venta
+    mostrarInformacionFlag.value = false; // Oculta la tabla de productos
+  };
+  
+  const mostrarInformacion = () => {
+    registrarVentaFlag.value = false; // Oculta el formulario de registrar venta
+    mostrarInformacionFlag.value = true; // Muestra la tabla de productos
+  };
+  
+  const agregarProducto = () => {
+    registrarVentaFlag.value = false; // Oculta el formulario de registrar venta
+    mostrarInformacionFlag.value = false; // Oculta la tabla de productos para mostrar el formulario de agregar
+  };
+  
+  const guardarNuevoProducto = async () => {
+    try {
+      const response = await ApiService.agregarProducto(nuevoProducto.value);
+      productos.value.push(response);
+      nuevoProducto.value = { nombre: '', descripcion: '', precio: '', cantidad_stock: '' }; // Limpiar el formulario
+      mostrarInformacionFlag.value = true; // Regresar a la vista de productos
+    } catch (error) {
+      console.error('Error al agregar producto:', error);
+    }
+  };
+  
+  
+  const agregarAlCarrito = (producto) => {
+    // Lógica para agregar un producto al carrito
+    carrito.value.push({
+      id: producto.id,
+      nombre: producto.nombre,
+      cantidad: producto.cantidadVendida,
+      precio: producto.precio
+    });
+  };
+  
+  const guardarVenta = async () => {
+    try {
+      // Llamar a la API para registrar la venta
+      await ApiService.registrarVenta(venta.value);
+      // Limpia el formulario
+      venta.value = { productoId: '', cantidad: 1 };
+    } catch (error) {
+      console.error('Error al guardar la venta:', error);
+    }
+  };
+  
+  const mostrarCarrito = () => {
+    const carritoModal = new window.bootstrap.Modal(document.getElementById('carritoModal'));
+    carritoModal.show();
+  
+  };
+  
+  
+  const actualizarProducto = async (id, producto) => {
+    try {
+      // Convertir valores al tipo correcto
+      const productoActualizado = {
+        nombre: producto.nombre,
+        descripcion: producto.descripcion,
+        precio: parseFloat(producto.precio), // Convertir precio a número de punto flotante
+        cantidad_stock: parseInt(producto.cantidad_stock, 10), // Convertir cantidad_stock a entero
+      };
+  
+      // Enviar solicitud al backend
+      const response = await ApiService.actualizarProducto(id, productoActualizado);
+      console.log("Producto actualizado:", response);
+  
+      // Actualizar localmente en la lista de productos
+      const index = productos.value.findIndex((p) => p.id === id);
+      if (index !== -1) {
+        productos.value[index] = response; // Usa la respuesta del backend para actualizar localmente
+      }
+    } catch (error) {
+      console.error("Error al actualizar producto:", error.response?.data || error.message);
+    }
+  };
+  
+  
+  const eliminarProducto = async (id) => {
+    try {
+      await ApiService.eliminarProducto(id);
+      productos.value = productos.value.filter(p => p.id !== id);
+    } catch (error) {
+      console.error('Error al eliminar producto:', error);
+    }
+  };
+  
+  </script>
 
 
 

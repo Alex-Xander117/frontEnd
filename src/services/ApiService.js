@@ -56,16 +56,57 @@ export default {
     }
   },
 
-  // Obtener productos
+
+
+    async registrarVenta(carrito, cliente_id) {
+      try {
+        console.log('Carrito enviado:', carrito);
+        console.log('Cliente ID:', cliente_id);  // Verifica si el cliente_id se está pasando correctamente
+    
+        const response = await axios.post(`${API_URL}/api/venta/venta`, {
+          
+          productos: carrito,  // Asegúrate de que "carrito" tiene la estructura correcta
+          cliente_id: cliente_id,  // Enviar el cliente_id
+        });
+    
+        console.log("apiserv", response);  // Muestra la respuesta para ver si es exitosa
+      } catch (error) {
+        console.error('Error al registrar venta:', error.response || error.message);
+        throw new Error('Error al registrar venta');
+      }
+    }
+    ,
+  
+  async finalizarCompra(carrito, cliente, setCarrito) {
+    try {
+      const response = await axios.post(`${API_URL}/api/venta/venta`, {
+        productos: carrito,
+        cliente: cliente,  // Enviar el cliente como parte del cuerpo de la solicitud
+      });
+  
+      if (response.status === 200) {
+        alert(`Compra realizada con éxito. ID de la venta: ${response.data.ventaId}`);
+        setCarrito([]);  // Limpiar el carrito después de la venta
+      } else {
+        throw new Error('Error al realizar la venta');
+      }
+    } catch (error) {
+      console.error('Error al finalizar la compra:', error.response || error.message);
+      alert('Hubo un problema al finalizar la compra');
+    }},
+
   async obtenerProductos() {
     try {
       const response = await axios.get(`${API_URL}/producto/productos`);
       return response.data; // Devuelve la lista de productos
     } catch (error) {
       console.error('Error al obtener productos', error.response || error.message);
-    }
-  },
 
+  }
+
+
+  
+},
   // Agregar un nuevo producto
   async agregarProducto(producto) {
     try {
@@ -122,3 +163,4 @@ export default {
     }
   }
 };
+

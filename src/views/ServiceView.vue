@@ -229,13 +229,15 @@ const nuevoProducto = ref({
   precio: '',
   cantidad_stock: ''
 });
-const venta = ref({
-  productoId: '',
-  cantidad: 1
-});
+const userId = ref('');
+
+
+
 
 onMounted(async () => {
   nombre.value = localStorage.getItem('nombre');
+  userId.value = JSON.parse(localStorage.getItem('session') ?? "{}").id;
+  console.log(userId)
   try{
     await obtenerProductos();
   }catch(error){
@@ -249,11 +251,13 @@ const toggleNavbar = () => {
 
 const handleLogout = () => {
   if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
+    localStorage.removeItem('nombre');
     localStorage.removeItem('userName');
     localStorage.removeItem('authToken');
     router.push('/login');
   }
 };
+
 
 // Funciones CRUD
 
@@ -301,25 +305,81 @@ const guardarNuevoProducto = async () => {
 
 
 const agregarAlCarrito = (producto) => {
-  // Lógica para agregar un producto al carrito
-  carrito.value.push({
-    id: producto.id,
-    nombre: producto.nombre,
-    cantidad: producto.cantidadVendida,
-    precio: producto.precio
-  });
+  // Validar que la cantidad vendida sea válida
+  if (producto.cantidadVendida <= 0 || !producto.cantidadVendida) {
+    alert('Por favor ingrese una cantidad válida');
+    return;
+  }
+
+  // Verificar si el producto ya está en el carrito
+  const productoExistente = carrito.value.find(item => item.id === producto.id);
+  
+  if (productoExistente) {
+    // Si el producto ya existe en el carrito, actualizar la cantidad
+    productoExistente.cantidad += producto.cantidadVendida;
+  } else {
+    // Si el producto no está en el carrito, agregarlo
+    carrito.value.push({
+      id: producto.id,
+      nombre: producto.nombre,
+      precio: producto.precio,
+      cantidad: producto.cantidadVendida
+    });
+  }
+
+  // Limpiar la cantidad vendida después de agregar al carrito
+  producto.cantidadVendida = 0;
 };
+
+const finalizarVenta = async () => {
+  console.log("aqui esto", userId.value)
+  try {
+    // Aquí puedes hacer el envío del carrito al servidor para registrar la venta
+    const response = await ApiService.registrarVenta(carrito.value, userId.value);
+
+    console.log(response)
+    carrito.value = []
+  } catch (error) {
+    console.error('Error al finalizar la venta:', error);
+    alert('Hubo un error al procesar la venta');
+  }
+};
+
+
 
 const guardarVenta = async () => {
   try {
-    // Llamar a la API para registrar la venta
-    await ApiService.registrarVenta(venta.value);
-    // Limpia el formulario
-    venta.value = { productoId: '', cantidad: 1 };
+    // Crear un objeto con los productos vendidos y sus cantidades
+    const productosVendidos = carrito.value.map(item => ({
+      idProducto: item.id,
+      cantidadVendida: item.cantidad,
+      total: item.cantidad * item.precio
+    }));
+
+    // Llamar a un servicio que guarde la venta
+    const response = await ApiService.registrarVenta(productosVendidos);
+    console.log("Producto guardado:", response);
+
+    // Limpiar el carrito y las cantidades de los productos
+    carrito.value = [];
+    productos.value.forEach(producto => {
+      producto.cantidadVendida = 0; // Limpiar la cantidad vendida de cada producto
+    });
+
+    // Mostrar un mensaje de éxito
+    alert('Compra registrada con éxito');
+    // Redirigir a otra página o cerrar el formulario
+    mostrarInformacionFlag.value = true;
+    registrarVentaFlag.value = false;
   } catch (error) {
     console.error('Error al guardar la venta:', error);
+    alert('Ocurrió un error al registrar la venta');
   }
 };
+
+
+
+
 
 const mostrarCarrito = () => {
   const carritoModal = new window.bootstrap.Modal(document.getElementById('carritoModal'));

@@ -14,6 +14,7 @@ export default {
       message: ''
     };
   },
+  
   async mounted() {
     try {
       const response = await ApiService.getUsers();
